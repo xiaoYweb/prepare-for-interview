@@ -72,7 +72,7 @@ function unique2(arr) {
 }
 
 // 数组中第k个最大元素
-// 二叉树中的所有路径
+// 二叉树中的所有路径 LeetCode 257
 // 二叉树中和为某一值的路径
 // String indexOf实现
 String.prototype._indexOf = indexOf;
