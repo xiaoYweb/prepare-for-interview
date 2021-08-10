@@ -113,7 +113,7 @@ function insertSort2(arr) { // 相较前一项小 则 交互位置
     const current = result[i]
     for (let j = i - 1; j >= 0; j--) {
       const prev = result[j]
-      if (j === i - 1 && prev <= current ) { // 前面数组 最后一项
+      if (j === i - 1 && prev <= current) { // 前面数组 最后一项
         break
       }
 
@@ -133,4 +133,21 @@ function insertSort2(arr) { // 相较前一项小 则 交互位置
   return result;
 }
 
-module.exports = insertSort2;
+
+function inertSort3(arr) {
+  if (arr.length < 2) return arr;
+  const result = arr.slice()
+
+  for (let i = 1; i < result.length; i++) {
+    for (let j = i; j > 0; j--) {
+      if (result[j] < result[j - 1]) { // 后一项 < 前一项
+        [ result[j - 1], result[j] ] = [result[j], result[j - 1]]
+      } else {
+        break
+      }
+    }
+  }
+  return result;
+}
+
+module.exports = inertSort3;

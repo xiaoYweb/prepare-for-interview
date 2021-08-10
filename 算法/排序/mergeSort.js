@@ -37,36 +37,34 @@ function mergeSort(arr) {
 }
 
 
-function mergeSort1(arr) {
-  if (!Array.isArray(arr)) return
-  const result = arr.slice()
-
+function mergeSort2(arr) {
   function sort(arr) {
     if (arr.length < 2) return arr;
     const i = Math.floor(arr.length / 2)
     const left = arr.slice(0, i)
     const right = arr.slice(i)
+
     return merge(sort(left), sort(right))
   }
   function merge(left, right) {
-    const list = []
+    const res = []
     while (left.length && right.length) {
-      list.push(
+      res.push(
         left[0] < right[0]
           ? left.shift()
           : right.shift()
       )
     }
     while (left.length) {
-      list.push(left.shift())
+      res.push(left.shift())
     }
     while (right.length) {
-      list.push(right.shift())
+      res.push(right.shift())
     }
-    return list;
+    return res;
   }
 
-  return sort(result)
+  return sort(arr);
 }
 
-module.exports = mergeSort1;
+module.exports = mergeSort2;

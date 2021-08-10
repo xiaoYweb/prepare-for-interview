@@ -38,4 +38,19 @@ function selectSort1(arr) {
   return result
 }
 
-module.exports = selectSort1;
+function selectSort2(arr) {
+  if (arr.length < 2) return arr;
+  const result = arr.slice()
+
+  for (let i = 0; i < result.length - 1; i++) {
+    for (let j = i + 1; j < result.length; j++) {
+      if (result[j] < result[i]) { // 后一项比前一项小
+        [result[i], result[j]] = [result[j], result[i]]
+      }
+    }
+  }
+
+  return result;
+}
+
+module.exports = selectSort2;

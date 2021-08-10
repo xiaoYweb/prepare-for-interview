@@ -23,19 +23,17 @@ function bubbleSort(arr) {
   return result;
 }
 
-function bubbleSort1(arr) {
-  if (!Array.isArray(arr)) return
+function bubbleSort2(arr) {
+  if (arr.length < 2) return arr;
   const result = arr.slice()
-
-  for (let i = result.length; i > 0; i--) { // 锁定内层循环次数  第一轮冒泡完成最后一位就是最大的 第二轮...倒数第二位是次大的
-    for (let j = 0; j < i; j++) {
-      if (result[j] > result[j + 1]) { // 相邻2项对比 交换位置 
-        [result[j], result[j + 1]] = [result[j + 1], result[j]]
+  for (let i = result.length; i > 0; i--) { // 循环次数 result.length - 1 次  提供
+    for (let j = 1; j < i; j++) {
+      if (result[j - 1] > result[j]) {
+        [result[j - 1], result[j]] = [result[j], result[j - 1]]
       }
     }
   }
-
   return result;
 }
 
-module.exports = bubbleSort1;
+module.exports = bubbleSort2;

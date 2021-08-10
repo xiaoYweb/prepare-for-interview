@@ -1,7 +1,7 @@
 // 原型链
 /**
- * 当访问对象的属性的时候 首先会查看对象内部是否存在改属性 若存在则返回 若不存在则查找对象原型(本身也是一个对象)上的属性 
- * 若原型上页没有找到就继续向上查找 制导顶层对象原型 如果还是没有找到则返回 undefined 
+ * 当访问对象的属性的时候 首先会查看对象内部是否存在该属性 若存在则返回 若不存在则查找对象原型(本身也是一个对象)上的属性 
+ * 若原型上页没有找到就继续向上查找 直到顶层对象原型 如果还是没有找到则返回 undefined 
  * 对象与对象之间的这种关联关系 就是 原型链
  */
 // 继承的实现   构造函数继承 原型链继承 组合寄生继承
@@ -43,12 +43,24 @@ child.prototype.constructor = child;
 
 // 你说一下箭头函数和普通函数的区别吧？
 /**
- * 箭头函数this执行有上一层作用域决定 
- * 箭头函数不能 new 构造函数调用 没有构造器
+ * 箭头函数this指向由上一层作用域决定 
+ * 箭头函数不能使用 new 构造函数调用 没有构造器
  * 没有arguments 
  */
 // 闭包
 // 事件循环Event Loop 宏任务有哪些？微任务有哪些？
+
+/**
+ * 宏任务
+ * io script中的代码块
+ * 事件  requestAnimationFrame (浏览器)    
+ * 定时器  setTimeout setInterval setTimeout(node)
+ * http请求api XMLHttpRequest fetch
+ * 微任务
+ * MutationObserver(浏览器) Object.observe
+ * promise.then catch finally process.next(node)
+ */
+
 /**
  * 1. window
  * 
@@ -126,10 +138,32 @@ function curry(fn, ...r) {
 // 深拷贝和浅拷贝是什么，有什么区别，手写一个深拷贝函数，最好能处理循环引用和Date、Reg的
 
 
-// 实现js的sort api，具体的排序算法自己决定，这里我选择了快排
+// 实现js的sort api，
+arr.sort((a, b) => a - b)
+
+function selfsort(cb = (a, b) => a - b) {
+  const arr = this;
+  if (arr.length < 2) return arr;
+  const current = arr[0]
+  const left = []
+  const right = []
+  for (let i = 1; i < arr.length; i++) {
+    const item = arr[i]
+    const res = cb(item, current)
+    if (res < 0) {
+      left.push(item)
+    } else {
+      right.push(item)
+    }
+  }
+  this.length = 0
+  this.push(...left.selfsort(cb), current, ...right.selfsort(cb))
+  return this;
+}
+Array.prototype.selfsort = selfsort;
 
 
-// 算法，合并两个有序链表
+// 算法，合并两个有序链表 leetcode 21.js
 
 
 // 算法，一个有序数组反转后，找到第K大的元素(时间复杂度小于等于nlogn)
@@ -139,7 +173,6 @@ function curry(fn, ...r) {
 
 
 // vue响应式原理，看过源码吗
-
 
 // vue diff算法的原理，这里我谈了vue的diff和react的diff，并且分析了他们相同点和不同点
 
@@ -169,7 +202,7 @@ function curry(fn, ...r) {
 
 function fn() {
   var wrap = document.createElement('div')
-  wrap.style.width =  '220px';
+  wrap.style.width = '220px';
   wrap.style.height = '300px';
   wrap.style.background = '#fff'
   wrap.style.position = 'fixed'
@@ -207,7 +240,7 @@ function fn() {
 // react diff采用的什么原则， (重点 last_index)
 
 
-// 算法，判断一个字符串是否是回文串
+// 算法，判断一个字符串是否是回文串 LeetCode 125
 
 function func(str) {
   if (typeof str !== 'string') return false
@@ -310,6 +343,40 @@ function func(str) {
 
 // 实现一个对象被for of遍历
 // 实现链表的添加、删除。复杂度多少
+class LinkedList {
+  add(node) {
+    if (!this.head) {
+      this.head = node;
+      return true
+    }
+    let current = this.head
+    while (current) {
+      if (!current.next) {
+        current.next = node;
+      } else {
+        current = current.next;
+      }
+    }
+  }
+  remove(node) {
+    if (!this.head) {
+      return false
+    }
+    let current = this.head;
+    if (current === node) {
+      this.head = null
+      return true;
+    }
+    while (current = current.next) {
+      if (current === node) {
+        
+        return true
+      }
+      if (current === )
+      current = current.next;
+    }
+  }
+}
 
 // 给了两段效果上都可以实现child 继承 parent，细节上的差别function child(){}
 // function parent(){}
