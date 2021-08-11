@@ -61,5 +61,18 @@ function func(nums, target) { // 动态哈希表法 进一步优化 前提 数�
   return []
 }
 
-console.log('[2, 7, 11, 15] --- 9', func([2, 7, 11, 15], 9))
-console.log('[2, 7, 11, 15] --- 9', func([3, 2, 4], 6)) // nums = [3,2,4], target = 6
+function sumOfTwoNumbers(nums, target) {
+  const mp = {}
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+    const diff = target - num;
+    if (mp[diff] !== undefined) {
+      return [mp[diff], i]
+    }
+    mp[num] = i;
+  }
+  return []
+}
+
+console.log('[2, 7, 11, 15] --- 9', sumOfTwoNumbers([2, 7, 11, 15], 9))
+console.log('[2, 7, 11, 15] --- 9', sumOfTwoNumbers([3, 2, 4], 6)) // nums = [3,2,4], target = 6
