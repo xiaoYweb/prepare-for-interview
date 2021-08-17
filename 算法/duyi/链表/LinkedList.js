@@ -57,7 +57,6 @@ console.log('---',
  */
 function getKthFromEnd(root, k) {
   if (!root) return
-  let i = 1;
   let slow = root;
   let fast = root;
   for (let i = 0; i < k; i++) {

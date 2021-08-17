@@ -64,3 +64,27 @@ function detectCycle(head) {
     slow = slow.next;
   }
 }
+
+function detectCycle(head) {
+  if (!head || !head.next) return null;
+  let fast = head;
+  let slow = head;  
+  while (true) {
+    if (!fast.next || !fast.next.next) {
+      return null
+    }
+    fast = fast.next.next;
+    slow = slow.next;
+    if (fast === slow) { // 第一次相遇 存在环
+      break
+    }
+  }
+  fast = head;
+  while (true) {
+    if (fast === slow) { // 第二次相遇 || 
+      return slow;
+    }
+    fast = fast.next;
+    slow = slow.next;
+  }
+}

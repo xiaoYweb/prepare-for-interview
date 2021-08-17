@@ -13,7 +13,8 @@ function reverseList(head) {
     next = current.next;
     current.next = prev;
     prev = current;
+    
     current = next;
   }
-  return pre;
+  return prev;
 }

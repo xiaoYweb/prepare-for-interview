@@ -77,13 +77,14 @@ function toSycle(node, pos) {
  * [1,2,3,4,5,6] 3位入口 [135 35 35 35 13] [123 45 63 45 63]
  * [1,2,3,4,5,6,7] 5为入口 [1357 6 6 1357] [1234 5 6 7567]
  */
-function isSycle(head) {
+function hasSycle(head) {
   if (!head || !head.next) return false;
+
   let fast = head;
   let slow = head;
   while (true) {
-    if (!fast || !fast.next) {
-      return false
+    if (!fast.next || !fast.next.next) {
+      return false;
     }
     fast = fast.next.next;
     slow = slow.next;
@@ -103,7 +104,8 @@ class LinkedList {
     this.val = val;
   }
 }
-function josephu(n, m) { // 环形链表解决
+// 构建 环形链表
+function createSycleLinkedList(n) {
   const head = new LinkedList(1)
   let current = head;
   for (let i = 1; i < n; i++) {
@@ -112,46 +114,56 @@ function josephu(n, m) { // 环形链表解决
     current = node;
   }
   current.next = head;
-
-  let node = head;
-  let count = 1;
-
-  while (true) {
-    if (count === m - 1) {
-      console.log(node.next.val)
-      node.next = node.next.next;
-      count = 0
-    }
-    node = node.next;
-    count++
-    if (node.next === node) return node
-  }
+  return head;
 }
-// console.log('josephu(31,4)', josephu(41, 3)) // ...16 31
-// console.log('josephuByArr(31,4)', josephuByArr(41, 3)) // ...16 31
 
-function josephuByArr(n, m) { // 数组形式实现
-  const people = []
-  for (let i = 0; i < n; i++) {
-    people[i] = i + 1
+// console.log('josephu(31,4)', josephu(41, 3)) // ...16 31
+console.log('josephuByArr(31,4)', josephuByArr(41, 3)) // ...16 31
+
+
+function josephuByArr(n, m) {
+  const people = new Array(n)
+  for (let i = 0; i < people.length; i++) {
+    people[i] = i + 1;
   }
   let index = -1; // 轮到第几个人报数
-  let count = 0; // 当前报数
   let remain = n; // 还剩多少人
+  let count = 0; // 当前报数
   while (remain > 0) {
-    index ++
+    index++
     if (index >= n) {
       index = 0
     }
-    if (!people[index]) continue;
-    
+    if (!people[index]) continue
+    count++
     if (count === m) {
-      people[index] = null;
-      count = 0;
-      remain --;
+      count = 0
+      remain--
+      console.log('->', people[index])
+      people[index] = null
     }
-    
-    count ++
   }
-  return index;
+  return index + 1;
+}
+
+// 环形链表实现 约瑟夫环
+function josephu(n, m) {
+  const head = createSycleLinkedList(n)
+  if (!head) return null;
+  let prev = null;
+  let current = head
+  let count = 0;
+  while (true) {
+    count++;
+    if (current.next === current) {
+      return current.val
+    }
+    if (count === m) {
+      count = 0;
+      console.log('--', current.val)
+      prev.next = current.next;
+    }
+    prev = current;
+    current = current.next;
+  }
 }
