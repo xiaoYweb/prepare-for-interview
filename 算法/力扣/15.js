@@ -102,7 +102,7 @@ function threeSum(nums, sum = 0) { // 双指针
   const result = []
 
   for (let i = 0; i < numList.length; i++) {
-    if (i && numList[i] === numList[i - 1]) continue // 跳过重复项
+    if (i > 0 && numList[i] === numList[i - 1]) continue // 跳过重复项
     let left = i + 1; // 重置 
     let right = numList.length - 1; // 重置 
 
@@ -118,7 +118,7 @@ function threeSum(nums, sum = 0) { // 双指针
           left++
         }
         while (numList[right] === numList[right + 1]) { // 跳过重复项 当前项 与前一项对比 
-          right++
+          right--
         }
       }
     }
@@ -128,4 +128,3 @@ function threeSum(nums, sum = 0) { // 双指针
 }
 
 // console.log('[-1,0,1,2,-1,-4] result', threeSum([-1, 0, 1, 2, -1, -4])) // [[-1,-1,2],[-1,0,1]]
-console.log(threeSum([-1, 0, 1, 2, -1, -4, -2, -3, 3, 0, 4]))

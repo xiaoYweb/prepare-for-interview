@@ -17,22 +17,24 @@
  */
 
 function lengthOfLongestSubstringError(s) { // 未考虑 dvdf 这种情况
-  let mp = {}
+  if (s.length === 0) return 0
   let maxLen = 0
+  let mp = {}
   let count = 0
   for (let i = 0; i < s.length; i++) {
-    const x = s[i];
-    if (!mp[x]) { // 不同 
-      mp[x] = 1;
+    const char = s[i];
+    const index = mp[char]
+    if (index === undefined) {
+      mp[char] = i
       count++
-    } else { // 相同
-      i--
-      mp = {}
-      count = 0;
+      continue
     }
     maxLen = Math.max(maxLen, count)
+    count = 0
+    i = index; // 指针重新指向上一次重复的字符位置
+    mp = {} // 清空缓存
   }
-  return maxLen
+  return Math.max(Object.keys(mp).length, maxLen)
 }
 
 console.log('abcabcbb', lengthOfLongestSubstring('abcabcbb')) // 3
@@ -40,27 +42,49 @@ console.log('bbbbb', lengthOfLongestSubstring('bbbbb')) // 1
 console.log('pwwkew', lengthOfLongestSubstring('pwwkew')) // ! -- 3
 console.log('', lengthOfLongestSubstring('')) // 0
 console.log(' ', lengthOfLongestSubstring(' ')) // ! -- 1
-console.log('-------------')
 console.log('dvdf', lengthOfLongestSubstring('dvdf')) // ! -- 3
+console.log('cdd', lengthOfLongestSubstring('cdd')) // ! -- 2
+console.log('cddc', lengthOfLongestSubstring('cddc')) // ! -- 2
 
 function lengthOfLongestSubstring(s) {
+  if (s === '') return 0
+  let prev = 0
   let maxLen = 0
-  let mp = {}
-  const len = s.length;
+  const len = s.length
+  const mp = {}
   for (let i = 0; i < len; i++) {
-    if (maxLen >= len - i) break // 最长字符串长度 >= 剩余遍历长度
-    for (let j = i; j < len; j++) {
-      const val = s[j];
-      
-      if (!mp[val]) {
-        mp[val] = 1;
-        maxLen = Math.max(maxLen, j - i + 1)
-      } else {
-        mp = {}
-        maxLen = Math.max(maxLen, j - i + 1)
-        break
-      }
+    const char = s[i];
+    const index = mp[char]
+    if (index !== undefined) { // 出现重复 左指针 索引指向上一个重复位置后一位
+      prev = Math.max(index + 1, prev) // 存在索引指针 前移情况 abba第的2个a索引为0+1 之前的索引为1+1  所以 取最大值  
+    }
+    mp[char] = i
+    maxLen = Math.max(maxLen, i - prev + 1)
+    if (maxLen >= len - prev) {
+      return maxLen
     }
   }
-  return maxLen;
+  return maxLen
+}
+// cddc  注意 左指针从d->c 索引位不能往前 所以去最大值  
+function lengthOfLongestSubstring(s) {
+  if (s === '') return 0
+  let prev = 0
+  let maxLen = 0
+  const len = s.length
+  const mp = {}
+  for (let i = 0; i < len; i++) {
+    const char = s[i];
+    
+    if (mp[char] !== undefined) { // 出现重复
+      prev = Math.max(mp[char] + 1, prev)
+    }
+    mp[char] = i
+    maxLen = Math.max(maxLen, i - prev + 1)
+    if (len - prev <= maxLen) { // 剩余为遍历的长度 小于当前最大字符串长度  直接返回
+      return maxLen
+    }
+  }
+
+  return maxLen
 }

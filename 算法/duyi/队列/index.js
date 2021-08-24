@@ -83,11 +83,11 @@ class CircularQueue {
     return true
   }
   front() {
-    if (this.isEmpty) return -1;
+    if (this.isEmpty()) return -1;
     return this.queue[this.head]
   }
   rear() {
-    if (this.isEmpty) return -1;
+    if (this.isEmpty()) return -1;
     const tail = (this.head + this.count - 1) % this.capacity
   }
 }

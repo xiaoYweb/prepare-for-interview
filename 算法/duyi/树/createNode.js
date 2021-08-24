@@ -1,16 +1,16 @@
 class Node {
-  constructor(data, left, right) {
-    this.data = data;
+  constructor(val, left, right) {
+    this.val = val;
     this.left = left;
     this.right = right;
   }
   show() {
-    console.log(this.data);
+    console.log(this.val);
   }
 }
 
-function createNode(data, left, right) {
-  return new Node(data, left, right)
+function createNode(val, left, right) {
+  return new Node(val, left, right)
 }
 
 module.exports = createNode;

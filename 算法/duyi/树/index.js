@@ -53,41 +53,8 @@ function maxTreeDepth(tree) { // leetcode 104
   2. 子节点排序 先左后右  从左往右添加
   3. 左孩子 2k   右孩子2k + 1
  */
-class Node {
-  constructor(data, left, right) {
-    this.data = data;
-    this.left = left;
-    this.right = right;
-  }
-  show() {
-    console.log(this.data);
-  }
-}
-// 构建一个  完全二叉树
-function createTree(arr) {
-  const nodeList = []
-  for (let i = 0; i < arr.length; i++) {
-    const node = new Node(arr[i])
-    nodeList.push(node)
-  }
-  // 构造节点关系 找出分支节点 === Math.floor(arr.length / 2)个 
-  // 1 -> 2 & 3  2 -> 4 $ 5 
-  for (let i = 0; i < Math.floor(arr.length / 2); i++) {
-    const node = nodeList[i]
-    const n = i + 1;
-    // 一定有左子节点 2n 数组索引 -1 
-    node.left = nodeList[2 * n - 1]
 
-    // 不一定有右子节点 判断越界  2n + 1 数组索引 -1 
-    const rightNodeIndex = 2 * n + 1 - 1
-    if (rightNodeIndex < arr.length) {
-      node.right = nodeList[rightNodeIndex]
-    }
-  } ``
-  return nodeList[0];
-}
-
-// console.log(createTree([1,2,3,4,5]))
+// 构建一个  完全二叉树  见 createTree.js
 
 
 /**
@@ -130,15 +97,15 @@ function preOrder(tree) {
 }
 function inOrder(tree) {
   if (!tree) return
-  console.log(tree.val)
   preOrder(tree.left)
+  console.log(tree.val)
   preOrder(tree.right)
 }
 function laterOrder(tree) {
   if (!tree) return
-  console.log(tree.val)
   preOrder(tree.left)
   preOrder(tree.right)
+  console.log(tree.val)
 }
 // 遍历完全二叉树 迭代法
 /**
@@ -151,7 +118,7 @@ function BFS(root) { // 层次遍历
   const queue = [root]
 
   while (queue.length) {
-    const current = queue.pop()
+    const current = queue.shift()
     console.log(current.val)
     if (current.left) {
       queue.push(current.left)
@@ -191,7 +158,7 @@ function preOrderByLoop(root) { // 非递归先序遍历
   }
 }
 
-function preOrderByLoop(root) { // 非递归中序遍历
+function inOrderByLoop(root) { // 非递归中序遍历
   if (!root) return
   let current = root;
   const stack = []
