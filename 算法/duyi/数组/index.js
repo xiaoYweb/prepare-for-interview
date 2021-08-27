@@ -138,14 +138,14 @@ function print2DArray(arr) {
  * 4       3
  * slice操作
  */
- function removeDuplicates1(nums) {
+function removeDuplicates(nums) {
   if (nums.length === 0) return 0;
   let compareVal = nums[0]
   let compareInenx = 0
   for (let i = 1; i < nums.length; i++) {
     const num = nums[i]
     if (compareVal === num) continue
-    nums[compareInenx + 1] = num; 
+    nums[compareInenx + 1] = num;
     compareVal = num
     compareInenx++
   }
@@ -163,7 +163,7 @@ function print2DArray(arr) {
  * 1    1->2 [2,1,1,4]
  * 4    2->3 [2,1,4,4]
  */
- function removeElement(nums, val) { // 
+function removeElement(nums, val) { // 
   let index = 0
   for (let i = 0; i < nums.length; i++) {
     const num = nums[i];

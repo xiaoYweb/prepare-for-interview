@@ -1,4 +1,4 @@
-/** middle  环形链表
+/** middle  环形链表 II 
  * 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
 
   为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
@@ -68,7 +68,7 @@ function detectCycle(head) {
 function detectCycle(head) {
   if (!head || !head.next) return null;
   let fast = head;
-  let slow = head;  
+  let slow = head;
   while (true) {
     if (!fast.next || !fast.next.next) {
       return null
@@ -87,4 +87,35 @@ function detectCycle(head) {
     fast = fast.next;
     slow = slow.next;
   }
+}
+
+/**
+ * 1,2,3,4 -> 2
+ * 1 1 --- 3 2 --- 2 3 --- 4 4 --- 3 2 --- 2 3 --- 4 4
+ * 第一次相遇 fast = head 步长 修改为 1 第二次相遇的 索引\节点 即为 入口 
+ * 1 1 --- 3 2 --- 2 3 --- 4 4(1,4) --- 2 2
+ * 1,2,3,4,5,6 -> 3
+ * 1 1 --- 3 2 --- 5 3 --- 3 4 --- 5 5 --- 3 6 --- 5 3 --- 3 4 --- 5 5 
+ * 第一次相遇 fast = head 步长 修改为 1 第二次相遇的 索引\节点 即为 入口 
+ * 1 1 --- 3 2 --- 5 3 --- 3 4 --- 5 5(1,5) -- 2 6 -- 3 3
+ */
+function detectCycle(head) {
+  if (!head || !head.next) return null
+  let slow = head
+  let fast = head
+  let hasMeet = false
+  while (fast.next && fast.next.next) {
+    slow = slow.next
+    fast = hasMeet
+      ? fast.next
+      : fast.next.next
+    if (fast === slow) {
+      if (hasMeet) return fast
+      hasMeet = true
+      if (slow === head) return head
+      fast = head
+      
+    }
+  }
+  return null
 }

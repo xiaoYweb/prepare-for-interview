@@ -29,13 +29,17 @@
  * 2111 * 4
  * 221 * 3
  */
+ console.log('2', climbStairs1(2)) // 2
+ console.log('3', climbStairs1(3)) // 3
+ console.log('4', climbStairs1(4)) // 5
+ console.log('5', climbStairs1(5)) // 8
 // 递归法
 function climbStairs(n) {
   if (n <= 3) return n
   return climbStairs(n - 2) + climbStairs(n - 1)
 }
 // 动态规划
-function climbStairs(n) {
+function climbStairs1(n) {
   if (n <= 3) return n
   const result = new Array(n)
   result[0] = 1
@@ -43,7 +47,7 @@ function climbStairs(n) {
   for (let i = 2; i < n; i++) {
     result[i] = result[i - 1] + result[i - 2]
   }
-  return result[n]
+  return result[n - 1]
 }
 
 function climbStairs(n) {

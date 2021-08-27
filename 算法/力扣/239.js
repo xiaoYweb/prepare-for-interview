@@ -17,7 +17,7 @@
   输出：[1]
   输入：nums = [1,-1], k = 1
   输出：[1,-1]
-  输入：nums = [9,11], k = 2
+  输入：nums = [4,-2], k = 2
   输出：[11]
   输入：nums = [4,-2], k = 2
   输出：[4]
@@ -39,8 +39,10 @@
  * [-1 -3 5]  [5]
  * ...
  */
-console.log('[1 3 -1 -3 5 3 6 7]', maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3))
-console.log('[1,-1]', maxSlidingWindow([1, -1], 1))
+console.log('[1 3 -1 -3 5 3 6 7]', maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3)) // [3,3,5,5,6,7]
+console.log('[1,-1]', maxSlidingWindow([1, -1], 1)) // [1,-1]
+console.log('[9,11]', maxSlidingWindow([9, 11], 2)) // [11]
+console.log('[4,-2]', maxSlidingWindow([4, -2], 2)) // [4]
 
 function maxSlidingWindow(nums, k) {
   const result = new Array(nums.length - k + 1)
@@ -67,6 +69,7 @@ function maxSlidingWindow(nums, k) {
       queue.pop()
     }
     queue.push(num)
+    
     result[i - k + 1] = queue[0]
   }
 
@@ -102,4 +105,53 @@ function maxSlidingWindow1(nums, k) { // 边界 1 <= k <= nums.length
   }
 
   return result;
+}
+
+/** [1,2,-1,-3,5,3,6,7]
+ * [1] [1]
+ * [1,2] [2]
+ * [1,2,-1] [2,-1]
+ * [2,-1,-3] [2,-1,-3]
+ * [-1,-3,5] [5]
+ * [-3,5,3] [5,3]
+ * 
+ */
+function maxSlidingWindow(nums, k) {
+  const result = []
+  const queue = []
+  for (let i = 0; i < k; i++) {
+    const num = nums[i];
+    while (queue.length && queue[queue.length - 1] < num) { // 若大于等于 直接 往前覆盖 直到第一个为止
+      queue.pop()
+    }
+    queue.push(num)
+  }
+  result.push(
+    nums[0] === queue[0]
+      ? queue.shift()
+      : queue[0]
+  )
+
+  // console.log('---', result, queue)
+  for (let i = k; i < nums.length; i++) {
+    const num = nums[i];
+
+    while (queue.length && queue[queue.length - 1] < num) { // 若大于等于 直接 往前覆盖 直到第一个为止
+      queue.pop()
+    }
+    queue.push(num)
+
+    // result.push(queue[0])
+
+    // if (nums[i - k] === queue[0]) {
+    //   queue.shift()
+    // }
+    result.push(
+      nums[i - k] === queue[0]
+        ? queue.shift()
+        : queue[0]
+    )
+  }
+
+  return result
 }

@@ -10,8 +10,8 @@
   输出：2
  */
 
-// console.log('', majorityElement([3, 2, 3]))
-console.log('', majorityElement([2, 2, 1, 1, 1, 2, 2]))
+console.log('', majorityElement([3, 2, 3])) // 3
+console.log('', majorityElement([2, 2, 1, 1, 1, 2, 2])) // 2
 // 集合 记录
 function majorityElement(nums) {
   const mp = {}
@@ -72,4 +72,18 @@ function majorityElement(nums) {
     }
   }
   return candidate;
+}
+
+
+/**
+ * [1,1,2]      1  1
+ * [1,1,1,2]    1  2
+ * [1,2,2,2]    2
+ * 
+ */
+function majorityElement(nums) { // 数组是非空的，并且给定的数组总是存在多数元素 数组中出现次数 大于 ⌊ n/2 ⌋ 的元素
+  const index = Math.floor(nums.length / 2)
+  nums.sort((a, b) => a - b)
+  
+  return  nums[index]
 }

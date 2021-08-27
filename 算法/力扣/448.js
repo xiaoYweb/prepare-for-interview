@@ -43,3 +43,20 @@ function findDisappearedNumbers(nums) {
   }
   return result;
 }
+
+function findDisappearedNumbers(nums) {
+  for (let i = 0; i < nums.length; i++) {
+    const num = nums[i];
+    const other = nums[num - 1]
+    if (num !== other) { // 不相等 交互位置 
+      [nums[i], nums[num - 1]] = [other, num]
+      i--
+    }
+  }
+  const result = []
+  for (let i = 0; i < nums.length; i++) { // 位置上 没有出现 位置+1的值 说明 是 消失的数据
+    const num = nums[i];
+    num !== i + 1 && result.push(i + 1)
+  }
+  return result
+}
