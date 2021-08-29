@@ -32,25 +32,37 @@
     每次搜索到了叶子节点，我们就找到了一个结果
     把达到叶子节点的结果收集起来，就可以求得 n个数中k个数的组合集合。
  */
-console.log('4,2', combine(4, 2))
+console.log('3,2', combine(3, 2))
 // console.log('1,1', combine(1,1))
 // console.log('4,1', combine(4,1))
 function combine(n, k) {
   const result = []
   let path = []
-  let startIndex = 1
-  function fn(n, k) {
+
+  const nums = []
+  for (let i = 0; i < n; i++) {
+    nums[i] = i + 1
+  }
+
+  function fn(start, end) {
     if (path.length === k) {
-      result.push(path)
-      path = []
-      return
+      return result.push(path.slice())
     }
-    for (let i = startIndex; i <= n; i++) {
-      path.push([i])
-      startIndex = i + 1
-      fn(n, k)
+
+    for (
+      let i = start;
+      // i < end;
+      i < end - k + path.length + 1; // 优化 剪枝
+      i++
+    ) {
+      const num = nums[i];
+      path.push(num)
+      fn(start + 1, end)
+      path.pop()
     }
   }
-  fn(n, k)
+  
+  fn(0, nums.length)
+
   return result
 }

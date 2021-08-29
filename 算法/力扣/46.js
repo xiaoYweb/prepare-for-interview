@@ -18,31 +18,129 @@
     ] 
  */
 console.log('permute', permute([1, 2, 3]))
-function permute(nums, result = []) {
-  console.log("🚀 ~ file: 46.js ~ line 16 ~ permute ~ nums", nums)
-  if (nums.length === 1) return [nums];
-  if (nums.length === 2) return [
-    [nums[0], nums[1]]
-    [nums[1], nums[0]]
-  ]
-  for (let i = 0; i < nums.length; i++) {
-    const num = nums[i];
-    const left = nums.slice(0, i)
-    const right = nums.slice(i + 1)
-    const res = [num, ...permute(left.concat(right)).flat(2)]
-    result.push(res)
-  }
+console.log('permute', permute([0, 1]))
+// console.log('permute', permute([1]))
+/**
+ *                  []
+ * [1]              [2]                [3]      
+ * [1,2] [1,3]      [2,1] [2,3]        [3,1] [3,2]
+ * [1,2,3] [1,3,2]  [2,1,3] [2,3,1]    [3,1,2] [3,2,1]
+ * 
+ * 思路 nums 依次(for循环)抽出第一个数 放入位置  (放入一个位置 即记录 path.push(num))
+ *      剩余 nums 继续递归上一步操作
+ *          出口 当 nums.length === 0      路径走完 一条路径即 一种 排序结果 存入 result  
+ *              出栈 返回上一级作用域 path.pop()
+ * 整个代码执行完成 即函数执行栈为空 
+ */
+function permute(nums) {
+  const result = []
+  const path = []
 
-  function fn(size, result) {
-    const addItem = nums[size - 1]
-    while (size >= 0 ) {
-      for (let i = 0; i < result.length; i++) {
-        result[i].splice(size, 0, addItem)
-
-      }
-      
-      size--
+  function fn(nums) {
+    if (nums.length === 0) {
+      result.push(path.slice())
+      return
+    }
+    for (let i = 0; i < nums.length; i++) {
+      const num = nums[i]
+      path.push(num)
+      nums.splice(i, 1) // 移除
+      fn(nums)
+      path.pop()
+      nums.splice(i, 0, num) // 添加
     }
   }
+  fn(nums)
+
   return result
+}
+
+/**
+ * 优化 用指针 替换 增删数组
+ * [1,2,3]
+ * [1, 2,3] [1,  2, 3]  [1,  3, 2]
+ * [2, 1,3] 
+ */
+function permute(nums) {
+  const result = []
+  const path = []
+
+  function fn(nums, p, q) {
+    if (p === q) {
+      result.push(path.slice())
+      return
+    }
+    for (let i = p; i < q; i++) { // 指针为 当前位置 
+      const num = nums[i];
+      path.push(num)
+      swap(nums, p, i)
+      fn(nums, p + 1, q)
+      swap(nums, p, i)
+      path.pop()
+    }
+  }
+
+  function swap(nums, i, j) {
+    if (nums.length === 1) return
+    const num = nums[i]
+    nums[i] = nums[j]
+    nums[j] = num
+  }
+
+  fn(nums, 0, nums.length)
+
+  return result
+}
+
+function permute(nums) {
+  const result = []
+  const path = []
+
+  function fn(nums) {
+    if (nums.length === 0) {
+      result.push(path.slice())
+      return
+    }
+    for (let i = 0; i < nums.length; i++) {
+      const num = nums[i];
+      path.push(num)
+      nums.splice(i, 1)
+      fn(nums)
+      path.pop()
+      nums.splice(i, 0, num)
+    }
+  }
+  fn(nums)
+
+  return result
+}
+
+function permute(nums) {
+  const result = []
+  const path = []
+
+  function fn(nums, start, q) {
+    if (start === q) {
+      result.push(path.slice())
+      return
+    }
+    for (let i = start; i < q; i++) {
+      const num = nums[i];
+      swap(nums, start, i)
+      path.push(num)
+      fn(nums, start + 1, q)
+      path.pop()
+      swap(nums, start, i)
+    }
+  }
+
+  fn(nums, 0, nums.length)
+
+  return result
+}
+function swap(nums, p, q) {
+  if (nums.length === 1) return
+  const temp = nums[p]
+  nums[p] = nums[q]
+  nums[q] = temp
 }

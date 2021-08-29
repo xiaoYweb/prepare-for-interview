@@ -1,4 +1,6 @@
 const createNode = require('./createNode')
+const createTree = require('./createTree')
+const tree = createTree()
 /**
  * 树 递归的数据结构
  * 由一个或多个数据节点组成 (根节点{1} 子节点{0,} 叶子节点{0,})
@@ -126,6 +128,26 @@ function BFS(root) { // 层次遍历
     if (current.right) {
       queue.push(current.right)
     }
+  }
+}
+
+// bfsBy2Queue(tree)
+function bfsBy2Queue(root) {
+  if (!root) return
+  let q1 = [root]
+  let q2 = []
+  while (q1.length || q2.length) {
+    while (q1.length) {
+      const { val, left, right } = q1.shift()
+      console.log(val)
+      left && q2.push(left)
+      right && q2.push(right)
+    }
+
+    // 交换指针
+    const temp = q2
+    q2 = q1
+    q1 = temp
   }
 }
 // console.log('--', preOrderBFS())
@@ -363,4 +385,70 @@ function buildTreeByOrder(laterOrder, inOrder) {
   root.right = buildTreeByOrder(rightLaterOrder, rightInOrder)
 
   return root;
+}
+
+/**
+ * []
+ * [1]      入栈 1
+ * [1,2]    入栈 2
+ * [1,2,4]  入栈 4
+ * [1,2]       出栈 4
+ * [1]         出栈 2
+ * [1,5]    入栈 5
+ * [1]         出栈 5
+ * []          出栈 1
+ * [3]      入栈 3
+ * []          出栈 3
+ */
+function preOrderByLoop(root) {
+  if (!root) return
+  let current = root
+  const stack = []
+  while (current || stack.length) {
+    while (current) {
+      stack.push(current)
+      current = current.left
+    }
+    if (stack.length) {
+      current = stack.pop()
+      current = current.right
+    }
+  }
+}
+/**
+ * []
+ * [1]      入栈 1
+ * [1,2]    入栈 2
+ * [1,2,4]  入栈 4
+ * [1,2]       出栈 4
+ * [1,2,5]  入栈 5
+ * [1,2]       出栈 5
+ * [1]         出栈 2
+ * [1,3]    入栈 3
+ * [1]         出栈 3
+ * []          出栈 1
+ */
+laterOrderByLoop(tree)
+function laterOrderByLoop(root) {
+  if (!root) return
+  let current = root
+  const stack = []
+  let lastNode = null
+  while (current || stack.length) {
+    while (current) {
+      stack.push(current)
+      current = current.left
+    }
+    if (stack.length) {
+      current = stack.pop()
+      if (!current.right || lastNode === current.right) { // 允许出栈
+        lastNode = current
+        console.log(current.val)
+        current = null // 当前节点不再处理 
+      } else { // 不允许出栈 继续向 右子节点 遍历 
+        stack.push(current)
+        current = current.right
+      }
+    }
+  }
 }

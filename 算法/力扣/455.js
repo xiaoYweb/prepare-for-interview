@@ -36,3 +36,27 @@ function findContentChildren(g, s) {
   }
   return total
 }
+
+/**
+ * 尽可能让更多的小孩 分到饼干  
+ * 对饼干及 小孩排序        
+ * 用最小的饼干 优先满足最小胃口的小孩  (贪心算法)
+ * 
+ */
+function findContentChildren(g, s) {
+  g.sort((a, b) => a - b)
+  s.sort((a, b) => a - b)
+  let total = 0
+  for (let i = 0; i < g.length; i++) {
+    const child = g[i]
+    if (s.length === 0) break
+    while (s.length) {
+      const food = s.shift()
+      if (food >= child) {
+        total++
+        break
+      }
+    }
+  }
+  return total
+}

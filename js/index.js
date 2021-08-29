@@ -15,6 +15,8 @@ function child(name, age) {
 child.prototype = Object.create(parent.prototype)
 child.prototype.constructor = child;
 
+// js的隐式转换
+
 
 // 数据类型
 /**
