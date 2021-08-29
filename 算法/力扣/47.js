@@ -14,7 +14,7 @@
   -10 <= nums[i] <= 10
  */
 console.log('[1,1,2]', permuteUnique([1, 1, 2]))
-// console.log('[1,2,3]', permuteUnique([1, 2, 3]))
+console.log('[1,2,3]', permuteUnique([1, 2, 3]))
 function permuteUnique(nums) {
   const result = []
   const path = []
@@ -48,4 +48,55 @@ function swap(nums, p, q) {
   const temp = nums[p]
   nums[p] = nums[q]
   nums[q] = temp
+}
+
+
+function permuteUnique(nums) {
+  const result = []
+  const path = []
+
+  function fn() {
+    if (nums.length === 0) {
+      return result.push(path.slice())
+    }
+    const mp = {}
+    for (let i = 0; i < nums.length; i++) {
+      const num = nums[i];
+      if (mp[num]) break
+      mp[num] = true
+      nums.splice(i, 1)
+      path.push(num)
+      fn()
+      path.pop(num)
+      nums.splice(i, 0, num)
+    }
+  }
+  fn(0, nums.length)
+
+  return result
+}
+
+function permuteUnique(nums) {
+  const result = []
+  const path = []
+
+  function fn(start, end) {
+    if (start === end) {
+      return result.push(path.slice())
+    }
+    const mp = {}
+    for (let i = start; i < end; i++) { // 开始位置 为 入参 开始位置 而不是 0
+      const num = nums[i];
+      if (mp[num]) break
+      mp[num] = true
+      path.push(num)
+      swap(nums, start, i)
+      fn(start + 1, end)
+      swap(nums, start, i)
+      path.pop()
+    }
+  }
+  fn(0, nums.length)
+
+  return result
 }

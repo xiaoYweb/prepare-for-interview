@@ -20,14 +20,19 @@ console.log('2', fib(2))
 console.log('3', fib(3))
 console.log('4', fib(4))
 console.log('5', fib(5))
-function fib(n) {
+function fib(n) { // // 时间复杂度 O(n2)
   if (n === 0) return 0
   if (n === 1) return 1
   return fib(n - 1) + fib(n - 2)
 }
-function fib(n) {
+function fib(n, cache = new Array(n + 1)) { // 时间复杂度 O(n) 空间复杂度 O(n)
   if (n === 0) return 0
   if (n === 1) return 1
+  if (cache[n]) return cache[n]
+  caches[n] = fib(n - 1) + fib(n - 2)
+  return cache[n]
+}
+function fib(n) { // 时间复杂度 O(n) 空间复杂度 O(1)
   const result = new Array(n + 1)// n === 4 ---> [0,1,2,3,4] len === n+1 === 5
   result[0] = 0
   result[1] = 1

@@ -144,3 +144,25 @@ function swap(nums, p, q) {
   nums[p] = nums[q]
   nums[q] = temp
 }
+
+function permute(nums) {
+  const result = []
+  const path = []
+
+  function fn() {
+    if (nums.length === 0) {
+      return result.push(path.slice())
+    }
+    for (let i = 0; i < nums.length; i++) {
+      const num = nums[i];
+      path.push(num)
+      nums.splice(i, 1)
+      fn()
+      path.pop()
+      nums.splice(i, 0, num)
+    }
+  }
+
+  fn()
+  return result
+}
