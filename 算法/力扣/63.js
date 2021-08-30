@@ -24,9 +24,15 @@
   1 <= m, n <= 100
   obstacleGrid[i][j] 为 0 或 1
  */
-console.log('[[0,0,0],[0,1,0],[0,0,0]]', uniquePathsWithObstacles([[0, 0, 0], [0, 1, 0], [0, 0, 0]])) // 2
-console.log('[[0,1],[0,0]]', uniquePathsWithObstacles([[0, 1], [0, 0]])) // 1
-console.log('[[0,1],[0,0]]', uniquePathsWithObstacles([[1, 0]]))
+console.log(
+  '[[0,0,0],[0,1,0],[0,0,0]]',
+  uniquePathsWithObstacles([[0, 0, 0], [0, 1, 0], [0, 0, 0]])
+) // 2
+console.log(
+  '[[0,1,0],[0,0,0],[0,0,0],[0,0,0]]',
+  uniquePathsWithObstacles([[0, 1, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
+) //
+// console.log('[[0,1],[0,0]]', uniquePathsWithObstacles([[0, 1], [0, 0]])) // 1
 function uniquePathsWithObstacles(obstacleGrid) {
   const m = obstacleGrid.length
   const n = obstacleGrid[0].length
@@ -56,5 +62,39 @@ function uniquePathsWithObstacles(obstacleGrid) {
         : dp[i - 1][j] + dp[i][j - 1]
     }
   }
+  return dp[m - 1][n - 1]
+}
+
+function uniquePathsWithObstacles1(obstacleGrid) {
+  if (obstacleGrid[0][0] === 1) return 0 // 开始位置 有障碍 
+  const m = obstacleGrid.length
+  const n = obstacleGrid[0].length
+  if (obstacleGrid[m - 1][n - 1] === 1) return 0 // 目的地位置 有障碍 
+  const dp = new Array(m);
+  for (let i = 0; i < m; i++) {
+    dp[i] = new Array(n);
+  }
+  dp[0][0] = 1
+  // console.log('--', dp)
+  for (let i = 1; i < m; i++) { // row 
+    dp[i][0] = obstacleGrid[i][0] === 1
+      ? 0
+      : dp[i - 1][0]
+  }
+  for (let j = 1; j < n; j++) {
+    dp[0][j] = obstacleGrid[0][j] === 1
+      ? 0
+      : dp[0][j - 1]
+  }
+  // console.log('--', dp, m, n)
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      const val = obstacleGrid[i][j]
+      dp[i][j] = val === 1
+        ? 0
+        : dp[i - 1][j] + dp[i][j - 1]
+    }
+  }
+
   return dp[m - 1][n - 1]
 }

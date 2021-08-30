@@ -41,8 +41,8 @@ console.log('3,7', uniquePaths(3, 7)) // 28
 console.log('3,2', uniquePaths(3, 2)) // 3
 console.log('7,3', uniquePaths(7, 3)) // 28
 console.log('3,3', uniquePaths(3, 3)) // 6
-console.log('3,3', uniquePaths(1, 1)) // 6
-console.log('51,9', uniquePaths(51, 9)) // 6 递归方案存在 栈溢出 
+console.log('1,1', uniquePaths(1, 1)) // 1
+console.log('51,9', uniquePaths(51, 9)) // 1916797311 递归方案存在 栈溢出 
 function uniquePaths(m, n) { // m -> y轴  n -> x轴  递归方案
   if (m > n) { // 确保前者更小
     [m, n] = [n, m]
@@ -85,4 +85,36 @@ function uniquePaths(m, n) { // 动态规划  图
     }
   }
   return dp[m - 1][n - 1]
+}
+
+/**
+ * 1 1  - 1
+ * 1 2  - 1
+ * 2 2  - 2
+ * 2 3  - {2 2}+ {1 2}      3
+ * 3 3  - {2 3} + {2, 3}   6
+ */
+function uniquePaths(m, n) { // 递归处理
+  if (m === 1 || n === 1) return 1 // 处理了 {1,x} {x,1} 的路线只有1条
+  if (m > n) { // 确保m变量最小值 
+    [m, n] = [n, m]
+  }
+
+  return uniquePaths(m - 1, n) + uniquePaths(m, n - 1)
+}
+
+function uniquePaths(m, n) {
+  const dp = new Array(m)
+  dp[0] = new Array(n).fill(1)
+  for (let i = 1; i < m; i++) {
+    dp[i] = [1]
+  }
+  // console.log(dp)
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = dp[i - 1][j] + dp[i][j-1]
+    } 
+  }
+
+  return dp[m-1][n-1]
 }

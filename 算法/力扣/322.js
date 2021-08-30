@@ -78,15 +78,48 @@ function coinChange(coins, amount) { // 自底向上 迭代解法
   const dp = new Array(amount + 1).fill(amount + 1) // 初始化dp数组 由于coin 面值 最低1元 所以 fill amount + 1 次 最大次数
   dp[0] = 0
 
-
+  // 遍历所有状态左右取值 
   for (let i = 0; i < dp.length; i++) {
+    // 求取 0 - amount  所需的最小找零次数 求取 0 - amount  所需的最小找零次数 
     for (let j = 0; j < coins.length; j++) {
       const coin = coins[j];
       if (i - coin < 0) continue // 子问题无解
       dp[i] = Math.min(
-        dp[i],
-        dp[i - coin] + 1
+        dp[i], // 若没取值 则为 amount + 1
+        dp[i - coin] + 1 // 此处索引i - coin >= 0 求取 0 - amount  所需的最小找零次数 
       )
+    }
+  }
+
+  return dp[amount] === amount + 1 ? - 1 : dp[amount]
+}
+
+function coinChange(coins, amount) {
+  if (amount === 0) return 0
+  if (amount < 0) return - 1
+  let min = Infinity // 最小零钱 个数 
+
+  for (let i = 0; i < coins.length; i++) {
+    const subProblem = coinChange(coins, amount - coins[i])
+    if (subProblem === - 1) continue // 跳过 找零 不符合条件的情况 
+    min = Math.min(
+      min,
+      subProblem + 1
+    )
+  }
+
+  return min === Infinity ? - 1 : min
+}
+
+function coinChange(coins, amount) {
+  if (amount < 0) return - 1
+  const dp = new Array(amount + 1).fill(amount + 1) // 由于最小硬币单位为1所以 最大次数不超过amount + 1  
+  dp[0] = 0
+  for (let i = 1; i < dp.length; i++) {
+    for (let j = 0; j < coins.length; j++) {
+      if (i - coins[j] < 0) continue
+      if (dp[i - coins[j]] === amount + 1) continue
+      dp[i] = dp[i - coins[j]] + 1
     }
   }
 
