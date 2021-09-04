@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const sleep = (wait) => {
+      const lastTime = Date.now()
+      while(Date.now() - lastTime <= wait) {}
+    }
+    const tasks = [
+      () => {
+        console.log('a 开始')
+        sleep(20)
+        console.log('a 结束')
+      },
+      () => {
+        console.log('b 开始')
+        sleep(20)
+        console.log('b 结束')
+      },
+      () => {
+        console.log('c 开始')
+        sleep(20)
+        console.log('c 结束')
+      },
+    ]
+    const channel = new MessageChannel()
+    const frameTime = 1000 / 60 // 一帧花费时间
+    let frameTimeDeadline // 这一帧截止时间点
+    let pendingCallback
+    const timeRemaining = () => frameTimeDeadline - performance.now()
+
+    channel.port2.onmessage = function () {
+      const currentTime = performance.now()
+      const didTimeOut = frameTimeDeadline < currentTime
+      if (didTimeOut || timeRemaining() > 0) {
+        pendingCallback && pendingCallback({ didTimeOut, timeRemaining })
+      }
+    }
+    window.requestIdleCallback = function (cb,options) {
+      // Date.now() = performance.now() + performance.timing.navigationStart
+      requestAnimationFrame(raf => {
+        frameTimeDeadline = raf + frameTime
+        pendingCallback = cb
+        channel.port1.postMessage(11)
+      })
+    }
+
+    requestIdleCallback(wookLoop)
+    function wookLoop(deadline) {
+      console.log('剩余时间', deadline.timeRemaining()) 
+      while(deadline.timeRemaining() > 0 && tasks.length) {
+        performUnitOfWork()
+      }
+      if (tasks.length) {
+        requestIdleCallback(wookLoop)
+      }
+    }
+    function performUnitOfWork() {
+      const task = tasks.shift()
+      task()
+    }
+  </script>
+</body>
+
+</html>

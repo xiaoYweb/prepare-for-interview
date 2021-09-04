@@ -8,6 +8,7 @@
  * 3. 合并乱序区间
  */
 /**
+ * tcp 和 udp 的区别和使用场景？
  * https与http有什么区别(一面刚好也被问到)
  * options请求方法有什么用
  * cookie,session,localstorage,sessionstorage有什么区别
@@ -17,6 +18,8 @@
  * 你知道哪些http头部
  * 怎么与服务端保持连接
  * 你了解哪些请求方法，分别有哪些作用和不同
+ * 讲一下同源策略和跨域方案？CORS 的几个头部是什么？
+ * 怎么做 DNS 预解析
  */
 
 /**
@@ -110,7 +113,18 @@
 
     笔试题：写一个处理加法可能产生精度的函数，比如 0.1 + 0.2 = 0.3
  */
-
+function add(a, b) {
+  let l1 = 0
+  let l2 = 0
+  try {
+    l1 = a.toString().join('.')[1].length
+  } catch (error) {}
+  try {
+    l2 = b.toString().join('.')[1].length
+  } catch (err) {}
+  const n = Math.pow(10, Math.max(l1,l2))
+  return (Math.round(a * n) + Math.round(b * n)) / n
+}
 /**
  * [1,2,3,4,6,7,9,13,15,16]=>['1->4',6->7,'9','13','15->16']实现一下
  */
