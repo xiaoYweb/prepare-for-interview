@@ -86,3 +86,26 @@
  *  : performWorkOnRoot -> findHighestPriorityRoot ->  
  * 
  */
+
+
+/**
+ * hooks
+ * 
+ * beginWork(current, workInProgress, renderExpirationTime) 
+ *  -> updateFunctionComponent(current, workInProgress, Component, nextProps, renderExpirationTime) 
+ *    -> prepareToUseHooks(current, workInProgress, renderExpirationTime)
+ *    -> nextChildren = Component(nextProps, context);
+ *    -> finishHooks(Component, nextProps, nextChildren, context)
+ *    -> reconcileChildren(current, workInProgress,nextChildren,renderExpirationTime)
+ * 
+ * 
+ * current.memoizedState -> firstCurrentHook 
+ * fiber.memoizedState 挂载 hook链表
+ * hook.queue.last 挂载这 update链表 
+ * 全局变量 firstCurrentHook 指向一个 
+ * currentlyRenderingFiber = 函数执行过程中 对应的当前 fiber
+ * firstCurrentHook = 函数执行过程中 第一个 hoos函数生成的 hook 
+ * 一个 hook函数 生成一个  hook对象 (链表结构)
+ * hook属性(queue queue.last指向最后一个更新对象update memoizedState用于放回的值 记录上一次的值)
+ * dispatchAction 闭包存储 所属 fiber quque队列 触发更新时 可以 直接计算  
+ */

@@ -53,7 +53,7 @@ requestIdleCallback(workLoop, { timeout: 500 })
 
 
 function workLoop(deadline) {
-  let shouldYield = flase
+  let shouldYield = false
 
   while (nextUnitOfWork && !shouldYield) {
     nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
@@ -385,17 +385,4 @@ export function useState(initialValue) {
 
 function useEffect(cb, dep) {
 
-}
-
-function useReducer(reducer, initialValue) {
-  let state = initialValue
-  const hook = workInProgressFiber.hooks[hookIndex]
-  const dispatch = action => {
-    const payload = reducer
-      ? reducer(action)
-      : action
-      newHook.updateQueue.enqueueUpdate(new Update(payload))
-  }
-
-  return [hook.state, dispatch]
 }
