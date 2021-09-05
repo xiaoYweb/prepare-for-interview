@@ -108,4 +108,13 @@
  * 一个 hook函数 生成一个  hook对象 (链表结构)
  * hook属性(queue queue.last指向最后一个更新对象update memoizedState用于放回的值 记录上一次的值)
  * dispatchAction 闭包存储 所属 fiber quque队列 触发更新时 可以 直接计算  
+ * 
+ * userEffect 
+ * hook.memoizedState = effect = { tag, create, destroy, inputs, next }
+ * fiber.updateQueue = componentUpdateQueue = { lastEffect: '存储着effectList 最后一个effect' }
+ * commitHookEffectList 中会使用到 fiber.updateQueue
+ * (commitBeforeMutationLifeCycles,commitPassiveHookEffects,commitLifeCycles,commitWork)
+ * 
+ * 
+ * useRef 创建一个对象 { current: initialValue } 挂载hook对象下  hook.memoizedState = ref
  */
