@@ -66,7 +66,10 @@ class Promise {
       const result = []
       const len = promiseArr.length;
       for (let i = 0; i < len; i++) {
-        const p = promiseArr[i];
+        let p = promiseArr[i];
+        if (!(p instanceof Promise)) {
+          p = Promise.resolve(p)
+        }
         p.then((val) => {
           index++
           result[i] = val
@@ -77,9 +80,12 @@ class Promise {
   }
   static race(promiseArr) {
     return new Promise((resolve, reject) => {
-      for (let i = 0; i < promiseArr.length; i++) {
-        const p = promiseArr[i];
-        p.then(resolve, reject)
+      for (const p of promiseArr) {
+        if (p instanceof Promise) {
+          p.then(resolve, reject)
+        } else {
+          return resolve(p)
+        }
       }
     })
   }
@@ -95,19 +101,21 @@ class Promise {
       const result = []
       const len = promiseArr.length;
       for (let i = 0; i < len; i++) {
-        const p = promiseArr[i];
+        let p = promiseArr[i];
+        if (!(p instanceof Promise)) {
+          p = Promise.resolve(p)
+        }
         p.then(val => {
           result[i] = {
             status: resolved,
             value: val
           }
-          index++
-          index === len && resolve(result)
         }, reason => {
           result[i] = {
             status: rejected,
-            value: reason
+            reason
           }
+        }).finally(() => {
           index++
           index === len && resolve(result)
         })

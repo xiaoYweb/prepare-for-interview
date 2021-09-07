@@ -36,7 +36,7 @@ class Koa extends EventEmmiter {
     res.stateCode = 404
     const ctx = this.createContext(req, res)
 
-    this.composee(ctx).then(() => {
+    this.compose(ctx).then(() => {
       if (ctx.body instanceof stream) { // 数据流
         ctx.body.pipe(res)
       } else if (typeof ctx.body === 'undefined') {
@@ -52,7 +52,7 @@ class Koa extends EventEmmiter {
     })
   }
   // 将所有middlewares取出 串联
-  composee = ctx => {
+  compose = ctx => {
     let index = -1
     const dispatch = i => {
       if (i <= index) return Promise.reject('next() called multiple times')

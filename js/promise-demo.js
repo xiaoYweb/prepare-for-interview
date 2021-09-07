@@ -7,7 +7,7 @@ const Promise = require('./promise')
  * 3. resolve reject 可异步调用 可同步调用
  * 4. 报错
  */
- function fn1() {
+function fn1() {
   new Promise((resolve, reject) => {
     // reject(222);
     // resolve(111);
@@ -123,7 +123,7 @@ function fn5() {
       resolve(3)
     }, 500)
   })
-  Promise.all([p1,p2,p3]).then(res => {
+  Promise.all([p1, p2, p3]).then(res => {
     console.log('fn5--> promise.all then res', res)
   }).catch(err => {
     console.log('fn5--> promise.all catch err', err)
@@ -151,7 +151,7 @@ function fn6() {
       resolve(3)
     }, 500)
   })
-  let ap = Promise.race([p1,p2,p3])
+  let ap = Promise.race([p1, p2, p3])
   ap.then(res => {
     console.log('fn6--> promise.race then res', res)
   }).catch(err => {
@@ -195,8 +195,8 @@ function fn11() {
     })
   }
   function fn() {
-    const p1 = retP(1, 400)
-    const p2 = retP(0, 200)
+    const p1 = 1
+    const p2 = retP(22, 200)
     const p3 = retP(false, 2000)
     console.log('----fn11----')
     Promise.allSettled([p1, p2, p3]).then(res => console.log('allSettled then', res))
@@ -206,5 +206,35 @@ function fn11() {
 
 // fn11()
 
+function fn12() {
+  new Promise((resolve, reject) => {
+    // throw new Error("error")
+    setTimeout(() => resolve(11), 1000)
+  })
+    .then(result => console.log(result))
+    .finally(() => console.log('Promise finally'))
+    .then(result => console.log(result))
+    .catch(reason => console.log('fn12 catch--> err', reason))
+}
 
+// fn12()
 
+// 超时中断请求
+function wrap(p) {
+  let abort
+  let p2 = new Promise((_, reject) => {
+    abort = reject
+  })
+  const newP = Promise.race([p, p2])
+  return newP
+}
+const p = new Promise(resolve => {
+  setTimeout(() => {
+    resolve('图片记载or接口请求')
+  }, 3000);
+})
+const newP = wrap(p)
+newP.then(res => {}, err => {})
+setTimeout(() => {
+  newP('超时')
+}, 2000);
