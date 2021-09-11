@@ -18,7 +18,7 @@ class EventEmitter {
       delete this._listenerMap[eventType]
       return
     }
-    this._listenerMap[eventType] = listeners.filter(n => n !== listener || n !== listener.origin)
+    this._listenerMap[eventType] = listeners.filter(n => !(n === listener || n.origin === listener))
   }
   once(eventType, listener) { // 为指定事件注册一个单次监听器，即 监听器最多只会触发一次，触发后立刻解除该监听器
     const only = (...args) => {
@@ -45,18 +45,18 @@ class EventEmitter {
 var emitter = new EventEmitter();
 
 var onceListener = function (args) {
-  console.log('我只能被执行一次', args, this);
+  console.log('我只能被执行一次', args);
 }
 
 var listener = function (args) {
-  console.log('我是一个listener', args, this);
+  console.log('我是一个listener', args);
 }
 
 emitter.once('click', onceListener);
 emitter.addListener('click', listener);
 
-emitter.emit('click', '参数');
-emitter.emit('click');
+emitter.emit('click', '参数 第1次执行');
+emitter.emit('click', '参数 第2次执行');
 
 emitter.removeListener('click', listener);
 emitter.emit('click');

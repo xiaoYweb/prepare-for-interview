@@ -87,6 +87,12 @@
  * 
  */
 
+/**
+ * renderRoot -> while(true){workLoop(isYieldy)} -> performUnitOfWork 
+ *  -> beginWork (reactEl-fiber) -> updateXXX -> reconcileChildren()
+ *  -> completeUnitOfWork (收集effectList)
+ */
+
 
 /**
  * hooks

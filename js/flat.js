@@ -10,3 +10,15 @@ function flat(n = 1) {
   }
   return val
 }
+
+const arr = [
+  1,
+  [11,12],
+  [3],
+  [4,44,412,454,4],
+  5
+]
+console.log(arr._flat())
+console.log(arr._flat(1))
+console.log(arr._flat(2))
+console.log(arr._flat(Infinity))
