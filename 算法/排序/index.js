@@ -8,8 +8,8 @@ const selectSort = require('./selectSort')
 // console.log('bubbleSort', bubbleSort(retArr()))
 // console.log('insertSort', insertSort(retArr()))
 // console.log('mergeSort', mergeSort(retArr()))
-// console.log('quickSort', quickSort(retArr()))
-console.log('selectSort', selectSort(retArr()))
+console.log('quickSort', quickSort(retArr()))
+// console.log('selectSort', selectSort(retArr()))
 
 function retArr(len = 10) {
   const arr = Array(len)

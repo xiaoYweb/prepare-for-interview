@@ -1,4 +1,4 @@
-class EventEmitter {
+class EventEmitter1 {
   constructor() {
     this._maxListeners = 10;
     this._listenerMap = Object.create(null);
@@ -42,6 +42,39 @@ class EventEmitter {
   }
 }
 
+class EventEmitter {
+  constructor() {
+    this.listenersMap = {}
+
+  }
+  addListener(type, fn, prepend) {
+    const listeners = (this.listenersMap[type] || (this.listenersMap[type] = []))
+    prepend
+      ? listener.unshift(fn)
+      : listeners.push(fn)
+  }
+  emit(type, ...args) {
+    this.listenersMap[type].forEach(cb => cb.apply(this, args))
+  }
+  removeListener(type, listener) {
+    if (!listener) {
+      this.listenersMap[type] = []
+      return
+    }
+    this.listenersMap[type] = this.listenersMap[type].filter(
+      fn => !(fn === listener || fn.origin === listener)
+    )
+  }
+  once(type, listener) {
+    const func = (...r) => {
+      listener.apply(this, r)
+      this.removeListener(type, listener)
+    }
+    func.origin = listener
+    this.addListener(type, func)
+  }
+}
+
 var emitter = new EventEmitter();
 
 var onceListener = function (args) {
@@ -60,3 +93,5 @@ emitter.emit('click', '参数 第2次执行');
 
 emitter.removeListener('click', listener);
 emitter.emit('click');
+
+

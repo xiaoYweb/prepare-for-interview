@@ -129,3 +129,51 @@ function test() {
 }
 
 test()
+
+
+function deepClone(val, mp = new WeakMap) {
+  if (val === null) return val
+  const valType = typeof val
+  if (valType === 'symbol') {
+    return Symbol(val.description)
+  }
+  if (valType === 'function') {
+    return eval(val.toString())
+  }
+  if (valType !== 'object') {
+    return val
+  }
+  if (val instanceof Date) {
+    return new Date(val)
+  }
+  if (val instanceof RegExp) {
+    const reFlag = /\w*$/
+    const reg = new RegExp(val.origin, val.exec(reFlag))
+    reg.lastIndex = val.lastIndex
+    return reg
+  }
+  if (mp.has(val)) return mp.get(val)
+  const result = val.constructor
+
+  if (val instanceof Map) {
+    val.forEach((key, value) => {
+      result.set(key, value)
+    })
+  } else if (val instanceof Set) {
+    val.forEach(key => {
+      result.add(key)
+    })
+  } else if (Array.isArray(val)) {
+    for (let i = 0; i < val.length; i++) {
+      result[i] = val[i];
+    }
+  } else {
+    Object.keys(val).forEach(key => {
+      result[key] = val[key]
+    })
+  }
+
+  mp.set(val, result)
+
+  return result
+}

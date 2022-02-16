@@ -14,7 +14,7 @@ export const nonDelegatedEvents = new Set(['scroll']) // 不需要绑定冒泡�
 // 事件名称注册完成后 绑定事件处理函数到容器container上
 export function listenToAllSupportedEvents(container) {
   allNativeEvents.forEach(domEventName => {
-    if (!nonDelegatedEvents.has(domEventName)) {
+    if (!nonDelegatedEvents.has(domEventName)) { // 需要冒泡的事件
       listenToNativeEvent(domEventName, false, container)
     }
     listenToNativeEvent(domEventName, true, container)
@@ -23,9 +23,10 @@ export function listenToAllSupportedEvents(container) {
 
 // 同一个容器上的同一阶段的事件只绑定一次 
 function listenToNativeEvent(domEventName, isCapture, container, eventSystemFlags = 0) {
-  const listenerSet = getEeventListenerSet(container)
-  const listenerSetKey = getEventListenerSetKey(domEventName, isCapture)
-  if (!listenerSet.has(listenerSetKey)) {
+  const listenerSet = getEeventListenerSet(container) // 防止重复绑定
+  // dbclick__capture || dbclick__bubble
+  const listenerSetKey = getEventListenerSetKey(domEventName, isCapture) 
+  if (!listenerSet.has(listenerSetKey)) { // 没有绑定过
     if (isCapture) {
       eventSystemFlags |= IS_CAPTURE_PHASE // 4
     }
@@ -58,7 +59,9 @@ export function dispatchEventForPluginEventSystem(
   const nativeEventTarget = nativeEvent.target
   const dispatchQueue = []
 
-  // 由插件来提取事件处理函数
+  // 由插件来提取事件处理函数 所有事件函数 用 dispatchEvent 函数包装 包装 并注册 
+  // dispatchEvent 函数 触发 时 获取 fiber 向上 收集 事件函数 于 listeners 数组中 
+  // 若 listeners.length > 0 则创建合成事件对象  dispatchQueue.push
   SimpleEventPlugin.extractEvents(
     dispatchQueue,
     domEventName,
@@ -68,6 +71,7 @@ export function dispatchEventForPluginEventSystem(
     eventSystemFlags,
     targetContainer
   )
+  // 执行
   processDispatchQueue(dispatchQueue, eventSystemFlags)
 }
 
@@ -75,9 +79,6 @@ function processDispatchQueue(dispatchQueue, eventSystemFlags) {
   const isCapturePhase = eventSystemFlags & IS_CAPTURE_PHASE !== 0
   for (let i = 0; i < dispatchQueue.length; i++) {
     const { event, listeners } = dispatchQueue[i];
-    if (event.isPropagationStopped()) { // 阻止了冒泡 所以 后续 捕获和冒泡 都不会继续执行了
-      return
-    }
 
     processDispatchQueueItemsInOrder(event, listeners, isCapturePhase)
   }
@@ -113,7 +114,7 @@ export function accumulateSinglePhaseListeners(
   nativeType,
   inCapturePhase
 ) {
-  const captureName = reactName + 'Capture'
+  const captureName = reactName + 'Capture' // onClick + Capture
   const reactEventName = inCapturePhase ? captureName : reactName
 
   const listeners = []
@@ -128,8 +129,8 @@ export function accumulateSinglePhaseListeners(
       listener && listeners.push(createDispatchListener(instance, listener, lastHostComponent))
     }
     instance = instance.return
-
   }
+  return listeners
 }
 
 

@@ -11,10 +11,11 @@ import { batchedEventUpdates } from "./ReactDomUpdateBatching"
  */
 export function dispatchEvent(domEventName, eventSystemFlags, targetContainer, nativeEvent) {
   const target = nativeEvent.target || nativeEvent.srcElement || window
-  const targetInst = getClosestInstanceFromNode(target)
+  const targetInst = getClosestInstanceFromNode(target) // dom 对应的fiber 对象
   // const props = getFiberCurrentPropsFromNode(target)
 
   batchedEventUpdates(() => {
+    // 递归收集 listeners 然后 依次执行 这段时间 全属于批量更新
     dispatchEventForPluginEventSystem(
       domEventName,
       eventSystemFlags,

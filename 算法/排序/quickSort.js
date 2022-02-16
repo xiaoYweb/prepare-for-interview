@@ -63,4 +63,19 @@ function quickSort2(arr) {
   return quickSort2(left).concat(current, quickSort2(right))
 }
 
-module.exports = quickSort2;
+function quickSort3(arr) {
+  if (arr.length < 2) return arr
+  const current = arr[0]
+  const left = []
+  const right = []
+  for (let i = 1; i < arr.length; i++) {
+    const item = arr[i];
+    item < current
+      ? left.push(item)
+      : right.push(item)
+  }
+  return quickSort3(left).concat(current, quickSort3(right))
+}
+
+
+module.exports = quickSort3;

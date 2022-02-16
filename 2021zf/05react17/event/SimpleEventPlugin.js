@@ -1,10 +1,11 @@
 import { registerSimpleEvents, topLevelEventsToReactNames } from './DomEventProperties'
+import { accumulateSinglePhaseListeners } from './DOMPluginEventSystem'
 import { IS_CAPTURE_PHASE } from './eventSystemFlags'
-import {SyntheticEvent, SyntheticMouseEvent } from './SynTheticEvent'
+import { SyntheticEvent, SyntheticMouseEvent } from './SynTheticEvent'
 
 
 
-
+// 提取
 export function extractEvents(
   dispatchQueue,
   domEventName,
@@ -14,10 +15,10 @@ export function extractEvents(
   eventSystemFlags,
   targetContainer
 ) {
-  const reactName = topLevelEventsToReactNames.get(domEventName)
+  const reactName = topLevelEventsToReactNames.get(domEventName) // 通过 click => onClick
   let SyntheticEventCtor
-  const reactEventType = domEventName
-  // 不同的事件合成事件是不一样的
+  const reactEventType = domEventName // click
+  // 不同的事件合成事件是不一样的 合成事件的构造函数也是不一样的
   switch (domEventName) {
     case 'click':
       SyntheticEventCtor = SyntheticMouseEvent
@@ -27,6 +28,7 @@ export function extractEvents(
       break;
   }
   const isCapturePhase = eventSystemFlags & IS_CAPTURE_PHASE !== 0
+  // fiber -> stateNode -> props on...匹配对应的事件名 -> 递归父fiber 收集对应的 事件函数
   const listeners = accumulateSinglePhaseListeners(
     targetInst,
     reactName,
@@ -42,11 +44,11 @@ export function extractEvents(
       nativeEventTarget
     )
     dispatchQueue.push({
-      event,
-      listeners
+      event, // 合成 事件对象
+      listeners // 监听函数
     })
   }
 }
 
 
-export { registerSimpleEvents as resgisterEvents } 
+export { registerSimpleEvents as resgisterEvents }

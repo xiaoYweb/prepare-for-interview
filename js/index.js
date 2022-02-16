@@ -371,11 +371,11 @@ class LinkedList {
     }
     while (current = current.next) {
       if (current === node) {
-        
+
         return true
       }
       if (current === )
-      current = current.next;
+        current = current.next;
     }
   }
 }
@@ -453,3 +453,12 @@ class LinkedList {
 
 
 // css的选择器有哪些？权重？
+
+
+
+/**
+ * RAF 和 RIC 是什么 区别
+ */
+
+
+

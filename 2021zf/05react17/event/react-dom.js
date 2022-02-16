@@ -24,7 +24,7 @@ function createDom(reactEl, container) {
 
   const returnFiber = container[internalInstanceKey] || null
   const fiber = {
-    tag: HostComponent,
+    tag: HostComponent, // 5
     type,
     stateNode: dom,
     returnFiber

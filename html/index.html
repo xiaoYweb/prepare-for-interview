@@ -1,14 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>demo</title>
+  <style>
+    .box {
+      width: 50px;
+      height: 50px;
+    }
 
-  <script src="./index.js?a=1"></script>
+    #demo1 {
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #demo2 {
+      height: 100px;
+      position: relative;
+    }
+
+    #demo2>div {
+      color: pink;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      /* transform: translateX(-50%) translateY(-50%); */
+      transform: translate(-50%, -50%);
+    }
+
+    #demo3 {
+      width: 100px;
+      height: 100px;
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    #demo3>div {
+      color: deeppink;
+      display: inline-block;
+    }
+
+    #demo4 {
+      height: 100px;
+      display: grid;
+    }
+
+    #demo4>div {
+      justify-self: center;
+      align-self: center;
+    }
+
+    #demo5 {
+      height: 100px;
+      display: grid;
+    }
+
+    #demo5>div {
+      margin: auto;
+    }
+  </style>
 </head>
+
 <body>
-  
+  <div id="demo2">
+    <div class="box">111</div>
+  </div>
+  <input id="example" />
+  <script>
+    var dom = document.getElementById('example')
+    const test = {
+      _value: undefined,
+      get value() {
+        return this._value
+      },
+      set value(val) {
+        this._value = val
+        console.log(val)
+        dom.value = val
+      }
+    }
+    dom.oninput = function (ev) {
+      const { value } = ev.target
+      test.value = value
+    }
+  </script>
 </body>
+
 </html>
