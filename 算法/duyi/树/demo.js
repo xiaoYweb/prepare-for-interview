@@ -73,9 +73,9 @@ function laterOrder(root) {
   laterOrder(root.right)
   console.log(root.val)
 }
-// console.log('preOrder', preOrder(root)) // 12453
-// console.log('inOrder', inOrder(root)) // 42513
-// console.log('laterOrder', laterOrder(root)) // 45231
+// console.log('preOrder', preOrder(root)) // 12453 当前节点 左节点 右节点
+// console.log('inOrder', inOrder(root)) // 42513   左节点 当前节点 右节点
+// console.log('laterOrder', laterOrder(root)) // 45231 左节点 右节点 当前节点
 
 /**
  *   [1,2,3,4,5]
@@ -106,8 +106,8 @@ inOrder     42513  出栈时打印顺序
 laterOrder  45231  
  */
 // console.log('preOrderByLoop', preOrderByLoop(root)) // 12453
-console.log('inOrderByLoop', inOrderByLoop(root)) // 42513
-// console.log('laterOrderByLoop', laterOrderByLoop(root)) // 45231
+// console.log('inOrderByLoop', inOrderByLoop(root)) // 42513
+console.log('laterOrderByLoop', laterOrderByLoop(root)) // 45231
 function preOrderByLoop(root) {
   const stack = [];
   let current = root;
@@ -154,3 +154,81 @@ function laterOrderByLoop(root) {
     current = current.right
   }
 }
+
+function inOrderByLoop(root) {
+  let current = root
+  const stack = []
+
+  while (current || stack.length) {
+    if (current) {
+      stack.push(current) // 入栈
+      // console.log("🚀 ~ file: demo.js ~ line 165 ~ preOrderByLoop ~ current", current.val)
+      current = current.left
+      continue
+    }
+    // 左子树不存在 
+    current = stack.pop() // 出栈
+    // console.log("🚀 ~ file: demo.js ~ line 165 ~ preOrderByLoop ~ current", current.val)
+    current = current.right
+  }
+}
+
+function laterOrderByLoop(root) {
+  let current = root
+  const stack = []
+  let lastOutNode = null
+  while (current || stack.length) {
+    if (current) {
+      stack.push(current) // 入栈
+      current = current.left
+      continue
+    }
+    // 左子树不存在 
+    current = stack.pop() // 出栈
+    if (!current.right || current.right === lastOutNode) { // 保留出栈
+      lastOutNode = current
+      console.log("🚀 ~  current", current.val)
+      current = null
+    } else {
+      stack.push(current)
+      current = current.right
+    }
+    
+  }
+}
+
+
+function laterOrderByLoop1(root) {
+  let current = root
+  const stack = []
+  let lastOutNode = null
+  while (current || stack.length) {
+    while (current) {
+      stack.push(current)
+      current = current.left
+    }
+    // 左子节点不存在 current === null
+    current = stack.pop() // 出栈
+    // 节点 出栈的情况 右子节点 为null || 上一次出栈的节点 === 右子节点
+    if (!current.right || current.right === lastOutNode) { // 出栈
+      console.log("🚀 ~current", current.val)
+      lastOutNode = current
+      current = null // 节点需要出栈 不再进入 左子节点入栈
+    } else {
+      stack.push(current)
+      current = current.right
+    }
+  }
+}
+
+function bfs(root) {
+  let current = null
+  const queue = [root]
+  while (queue.length) {
+    current = queue.shift()
+    console.log('current', current.val)
+    current.left && queue.push(current.left)
+    current.right && queue.push(current.right)
+  }
+}
+// bfs(root)

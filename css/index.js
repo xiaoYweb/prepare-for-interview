@@ -19,3 +19,12 @@
    * inherit (继承父元素定位属性)
    * sticky () 相对视口定位边界(设置 top left .. 值)  没有超出边界 则 元素在容器内固定在指定位置 超出边界 则 固定视口边界定位  
    */
+
+  /**
+   * flex:1 是哪些属性组成的
+   * 
+   * flex 实际上是 flex-grow、flex-shrink 和 flex-basis 三个属性的缩写。
+   * flex-grow 自定义放大比例
+   * flex-shrink 自定义缩小比例
+   * flex-basis 定义在分配多余空间之前，项目占据的主轴空间（main size），浏览器根据此属性计算主轴是否有多余空间
+   */

@@ -50,7 +50,7 @@ class EventEmitter {
   addListener(type, fn, prepend) {
     const listeners = (this.listenersMap[type] || (this.listenersMap[type] = []))
     prepend
-      ? listener.unshift(fn)
+      ? listeners.unshift(fn)
       : listeners.push(fn)
   }
   emit(type, ...args) {

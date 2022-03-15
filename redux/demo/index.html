@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <div id="counter"></div>
+    <button id="add">add</button>
+    <button id="minus">minus</button>
+  </div>
+  <script>
+    const addBtn = document.getElementById('add')
+    const minusBtn = document.getElementById('minus')
+    const counter = document.getElementById('counter')
+
+    function reducer(state = { number: 1 }, action) {
+      switch (action.type) {
+        case 'ADD':
+          return { number: state.number + 1 }
+        case 'MINUS':
+          return { number: state.number - 1 }
+        default:
+          return state
+      }
+    }
+    const story = createStory(reducer, { number: 2 })
+
+    function render() {
+      counter.innerHTML = story.getState().number + ''
+    }
+    render()
+
+   
+    addBtn.addEventListener('click', ev => {
+      story.dispatch({ type: 'ADD' })
+    })
+    minusBtn.addEventListener('click', ev => {
+      story.dispatch({ type: 'MINUS' })
+    })
+
+    const unlisten = story.sucscribe(render)
+
+    setTimeout(() => {
+      unlisten() 
+    }, 3000);
+
+    function createStory(reducer, preloadState) {
+      let state = preloadState
+      let listeners = []
+      const dispatch = action => {
+        state = reducer(state, action)
+        listeners.forEach(cb => cb())
+      }
+      const getState = () => state
+
+      const sucscribe = listener => {
+        listeners.push(listener)
+        return () => {
+          listeners = listeners.filter(item => item !== listener)
+        }
+      }
+
+
+      dispatch({ type: '@@REDUX_INIT' })
+      return {
+        dispatch,
+        getState,
+        sucscribe
+      }
+    }
+  </script>
+</body>
+
+</html>

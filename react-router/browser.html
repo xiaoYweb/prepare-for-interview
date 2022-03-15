@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <ul>
+    <li><span id="page1">page1</span></li>
+    <li><span id="page2">page2</span></li>
+  </ul>
+  <script>
+    const globalHistory = window.history;
+    // 重写方法
+    ~(function (globalHistory) {
+      const oldPushState = globalHistory.pushState;
+      globalHistory.pushState = function (stateObj, title, url) {
+        const result = oldPushState.apply(null, arguments)
+        if (typeof window.onpushstate === 'function') {
+          window.onpushstate({
+            type: 'pushstate',
+            state: stateObj
+          })
+        }
+        return result
+      }
+    })(globalHistory);
+
+    window.onpushstate = function (event) {
+      const { type, state } = event;
+      console.log('onpushstate type state', type, state)
+    }
+
+    // pushState replaceState 不会触发 popstate 事件
+    window.addEventListener('popstate', (event) => {
+      const { state, type } = event;
+      // window.location { pathname }
+      // history.pushState(stateObj, title, url)
+    })
+
+    page1.addEventListener('click', (ev) => {
+      globalHistory.pushState({ page: 2 }, null, '/page2')
+    })
+    page2.addEventListener('click', (ev) => {
+      globalHistory.pushState({ page: 1 }, null, '/page1')
+    })
+  </script>
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 /**
- * dom-diff 是一个对比老的fiber和新的jsx数组的，生成新fiber的过程
+ * dom-diff 是一个对比老的fiber树  和 新的jsx[reactEl...]数组对比 生成新fiber树 的过程
  * 1. 只做同级/同一层比较
  * 2. 不同类型 直接销毁 重新创建 type不同
  * 3. key 表示移动元素
@@ -18,7 +18,7 @@
  * 2. key和type是否相同
  */
 
-/** 单节点情况 1
+/** 单节点情况 1 判断key 和 type 是否相同 决定是否复用老节点   如果节点没有key  则默认 索引为key
  * type 或 key 不一样
  * 调和阶段 老的节点需要标记为删除  新的节点标记为插入
  *    commit 提交阶段
@@ -61,7 +61,7 @@
 /**
  * 新的节点有多个子节点
  * 会进行2次遍历
- * 1. 处理节点的更新 属性及类型的更新
+ * 1. 处理节点的更新 属性及类型的更新  业务/应用场景 较多
  * 2. 处理节点的新增、删除及移动
  * 尽量少的移动 若移动 地位高的不动 地位低的移动
  */
@@ -87,7 +87,7 @@
   4. 更新 d
  */
 
-/** 多节点 情况 2
+/** 多节点 情况 2 key相同 type 不同
  *
   <ul>
     <li key="a">a</li> fiber
@@ -113,17 +113,18 @@
 /** 多节点 情况 3 移动
  * 1. 第一轮遍历发现 key 不一样 跳出第一轮循环   说明 顺序已经发生变化
  * 2. 建立map映射 key = 对应fiber 键值对 
+ *  const map = { a: a, b: b, c: c, ... }
  * 3. 继续上一个位置 遍历新节点 是否存在于 map中
  *      ? 位置遍历  老节点可以复用 标记为更新
  *      : 标记为删除
  * lastPlacedIndex = 0
   <ul>
-    <li key="a">a</li> fiber     oldIndex
-    <li key="b">b</li>
-    <li key="c">c</li>
-    <li key="d">d</li>
-    <li key="e">e</li>
-    <li key="f">f</li>
+    <li key="a" style={oldStyle}>a</li> fiber     oldIndex
+    <li key="b" style={oldStyle}>b</li>
+    <li key="c" style={oldStyle}>c</li>
+    <li key="d" style={oldStyle}>d</li>
+    <li key="e" style={oldStyle}>e</li>
+    <li key="f" style={oldStyle}>f</li>
   </ul>
   <ul>
     <li key="a">a - new</li>     newIndex 
@@ -134,6 +135,9 @@
     <li key="g">g - new</li>     map[b] 不存在 则 新增
                                  ...遍历完成后    剩余的标记为 删除
   </ul>
+  fiber 链中存在 index 索引 
+  遍历 [elc, ele ...] 对比 map映射中的老fiber 对比 key type 是否存在 
+  lastPlacedIndex 
   操作步骤
   1. 删除 d
   2. 删除 f

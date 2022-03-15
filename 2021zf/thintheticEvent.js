@@ -2,7 +2,8 @@
  * 合成事件
  * 事件委托 到 document上
  * 当触发真实dom事件时候，先处理原生事件，然后会冒泡到document对象上，再出里react事件
- * 合成事件绑定是在reconciliation阶段绑定的，会在原生事件绑定前 执行 所以16版本 (原生事件冒泡到document上才触发委托的react合成事件)先执行模拟捕获冒泡 在执行最后的 document 原生 冒泡
+ * 合成事件绑定是在reconciliation阶段绑定的，会在原生事件绑定前 执行 
+ * 所以16版本 (原生事件冒泡到document上才触发委托的react合成事件)先执行模拟捕获冒泡 在执行最后的 document 原生 冒泡
  * 
  * 优点  
  * 1. 兼容性处理
@@ -28,7 +29,7 @@
  * event.stopPropagation 不向上冒泡
  * event.stopImmediatePropagation 不向上冒泡 且 本级剩余事件也不执行
  */
-
+// document.addEventListener(click, dipatchEvent) // 冒泡阶段
 function dipatchEvent(event) {
   const paths = []
   let current = event.target
@@ -70,6 +71,10 @@ function dipatchEvent(event) {
  * 11. document react 捕获
  * 12. document react 冒泡
  */
+
+// container.addEventListener(click, ev => { dipatchEvent17(ev, true) }, true) // 捕获阶段
+// container.addEventListener(click, dipatchEvent17) // 冒泡阶段
+
 function dipatchEvent17(event, isCapture = false) {
   const paths = []
   let current = event.target

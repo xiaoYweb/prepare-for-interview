@@ -15,7 +15,7 @@ class Router {
   constructor() {
     this.stack = []
   }
-  routers() {
+  routes() {
     return async (ctx, next) => {
       const { pathm, method } = ctx;
       const layers = this.stack.filter(layer => layer.match(pathm, method))
