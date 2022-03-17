@@ -35,6 +35,7 @@ class Router {
     return dispatch(0)
   }
 }
+
 ['get', 'post'].forEach(method => {
   Router.prototype[method] = function (path, callback) {
     const layer = new Layer(path, 'get', callback)
