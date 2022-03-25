@@ -1,38 +1,38 @@
 
-module.exports = Delegate
 
-function Delegate(proto, target) {
-  if (!(this instanceof Delegate)) return new Delegate(proto, target)
-  this.target = target;
-  this.proto = proto;
+
+function Delegates(proto, target) {
+  if (!(this instanceof Delegates)) return new Delegates(proto, target)
+
+  this.proto = proto
+  this.target = target
 }
 
-
-// delegate(proto, 'response')
-//   .getter('headerSent')
-//   .getter('writable');
-Delegate.prototype.getter = function (key) {
+Delegates.prototype.getter = function (key) {
   const proto = this.proto
   const target = this.target
-  
-  proto.__defineGetter__(key, function () {
+
+  proto.__defineGetter__(key, function() {
     return this[target][key]
   })
 
   return this
 }
 
-Delegate.prototype.setter = function (key) {
+Delegates.prototype.setter = function (key) {
   const proto = this.proto
   const target = this.target
 
-  proto.__defineSetter__(key, function (val) {
+  proto.__defineSetter__(key, function(val) {
     return this[target][key] = val
   })
 
   return this
 }
 
-Delegate.prototype.access = function (key) {
-  return this.getter(key).setter(key)
+Delegates.prototype.access = function () {
+  return this.getter().setter()
 }
+
+
+module.exports = Delegates
