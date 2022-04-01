@@ -53,4 +53,20 @@ function selectSort2(arr) {
   return result;
 }
 
+
+function selectSort(arr) {
+  const list = arr.slice()
+  for (let i = 0; i < list.length - 1; i++) {
+    let minIndex = i
+    for (let j = i + 1; j < list.length; j++) {
+      const current = list[j]
+      if (current < list[minIndex]) {
+        minIndex = j
+      }
+    }
+    [list[i], list[minIndex]] = [list[minIndex], list[i]]
+  }
+  return list
+}
+
 module.exports = selectSort2;

@@ -36,4 +36,19 @@ function bubbleSort2(arr) {
   return result;
 }
 
+
+function bubbleSort3(arr) {
+  const list = arr.slice()
+  for (let i = 0; i < list.length - 1; i++) { // 决定 外层循环次数
+    for (let j = 0; j < list.length - 1 - i; j++) { // 每轮的循环 
+      const current = list[j]
+      const next = list[j + 1]
+      if (next < current) { // 当前项的与后一项对比  后一项更小 需调换未知
+        [list[j], list[j + 1]] = [next, current]
+      }
+    }
+  }
+  return list
+}
+
 module.exports = bubbleSort2;

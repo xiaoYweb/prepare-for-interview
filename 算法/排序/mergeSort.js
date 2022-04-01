@@ -67,4 +67,39 @@ function mergeSort2(arr) {
   return sort(arr);
 }
 
+function mergeSort(arr) {
+  if (arr.length < 2) return arr
+  const list = arr.slice()
+
+  function sort(list) {
+    if (list.length < 2) return list
+    const i = Math.floor(list.length / 2)
+    const left = list.slice(0, i)
+    const right = list.slice(i)
+    return merge(sort(left), sort(right))
+  }
+
+  function merge(left, right) { // 合并2个有序数组 
+    let result = []
+
+    while (left.length && right.length) {
+      result.push(
+        left[0] < right[0]
+          ? left.shift()
+          : right.shift()
+      )
+    }
+    if (left.length) {
+      result = result.concat(left)
+    }
+    if (right.length) {
+      result = result.concat(right)
+    }
+
+    return result
+  }
+
+  return sort(list)
+}
+
 module.exports = mergeSort2;
