@@ -151,15 +151,15 @@ function inertSort3(arr) {
 }
 
 
-function insertSort(arr) {
+function insertSort4(arr) {
+  if (arr.length < 2) return arr
   const list = arr.slice()
 
-  for (let i = 1; i < list.length; i++) { // 从第二项开始 
-    const right = list[i]
-    for (let j = i - 1; j >= 0; j--) { // 逐级向前对比 知道 没有前一项更小 停止 
-      if (list[j] > right) { // 此处 即时替换位置
-        [list[j], list[j + 1]] = [list[j + 1], list[j]]
-      } else {
+  for (let i = 1; i < list.length; i++) { // 遍历 len - 1
+    for (let j = i; j > 0; j--) { // 从第 i 项开始遍历  逐项与前一项对比 
+      if (list[j] < list[j - 1]) { // 比前一项更小 则 交换位置
+        [list[j - 1], list[j]] = [list[j], list[j - 1]]
+      } else { // 若比前一项大 则 跳出循环 进入下一轮
         break
       }
     }
@@ -169,4 +169,4 @@ function insertSort(arr) {
 }
 
 
-module.exports = inertSort3;
+module.exports = insertSort4;

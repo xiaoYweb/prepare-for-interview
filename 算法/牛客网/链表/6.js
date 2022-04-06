@@ -14,3 +14,15 @@ function hasCycle(head) {
 
   return false
 }
+
+
+function hasCycle(head) {
+  if (!head || !head.next) return false
+  let fast = head
+  while (fast && fast.next) {
+    fast = fast.next.next
+    head = head.next
+    if (head === fast) return true
+  }
+  return false
+}

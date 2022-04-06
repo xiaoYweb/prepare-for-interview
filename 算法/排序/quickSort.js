@@ -78,7 +78,7 @@ function quickSort3(arr) {
 }
 
 
-function quickSort(arr) {
+function quickSort4(arr) {
   if (arr.length < 2) return arr
   const first = arr[0]
   const left = []
@@ -90,7 +90,7 @@ function quickSort(arr) {
       right.push(arr[i])
     }
   }
-  return quickSort(left).concat(first).concat(quickSort(right))
+  return quickSort(left.concat(first, right))
 }
 
-module.exports = quickSort3;
+module.exports = quickSort4;

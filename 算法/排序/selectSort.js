@@ -54,19 +54,22 @@ function selectSort2(arr) {
 }
 
 
-function selectSort(arr) {
+function selectSort3(arr) {
   const list = arr.slice()
+  
   for (let i = 0; i < list.length - 1; i++) {
-    let minIndex = i
+    let minIndex = i // 记录最小索引
     for (let j = i + 1; j < list.length; j++) {
-      const current = list[j]
-      if (current < list[minIndex]) {
+      if (list[j] < list[minIndex]) {
         minIndex = j
       }
     }
-    [list[i], list[minIndex]] = [list[minIndex], list[i]]
+    if (minIndex !== i) { // 若果不是自己本身  交互位置
+      [list[i], list[minIndex]] = [list[minIndex], list[i]]
+    }
   }
+
   return list
 }
 
-module.exports = selectSort2;
+module.exports = selectSort3;

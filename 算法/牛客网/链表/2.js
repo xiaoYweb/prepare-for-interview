@@ -71,9 +71,9 @@ function reverseBetween(head, left, right) {
   let start = { next: head }
   head = start
   let x = left
-  while (left--) {
-    prev = head
-    head = head.next
+  while (x--) {
+    prev = head // 前一项
+    head = head.next // 当前项
   }
   x = right - left
   while (x--) {
@@ -93,4 +93,98 @@ function reverseBetween(head, left, right) {
   }
 
   return start.next
+}
+
+// {1,2,3,4,5},2,4
+function reverseBetween(head, m, n) {
+  const result = { next: head }
+
+  let x = m - 1
+
+  let leftNode = result // 左开始指针
+  while (x--) {
+    leftNode = head
+    head = head.next
+  }
+  x = n - m // 2 3 -> 1
+
+  let current = null
+  let prev = null
+  const end = head
+
+  while (x--) {
+    prev = current // 上一个
+
+    current = head // 当前
+
+    head = head.next // 下一个
+
+    current.next = prev // 修改指针
+  }
+
+
+  // head 
+  const rightNode = head && head.next
+  head.next = current
+
+  leftNode.next = head // 连接左节点
+  end.next = rightNode // 连接右节点
+
+  return result.next
+}
+
+function reverseBetween(head, m, n) {
+  if (m === n) return head
+  const result = { next: head }
+  let prev, next;
+  head = result
+  let x = m
+  while (x--) {
+    prev = head
+    head = head.next
+  }
+
+  x = n - m
+  while (x--) {
+    // 1 2 3 4 5
+    // 1 3 2 4 5
+    // 1 3 4 2 5
+    // 此解法 逻辑清晰 但内存占用较大 不符合 牛客网 内存要求
+    next = head.next // 指向下一项
+    prev.next = next // 前一项 .next --> 下一项
+
+    prev = head // 
+    head = next
+
+    next.next = prev // 下一项 .next --> 当前项
+  }
+
+  return result.next
+}
+
+// 
+function reverseBetween(head, m, n) {
+  if (m === n) return head
+  let x = m
+  let result = { next: head }
+  head = result
+  let prev, prevnext, next
+  while (x--) {
+    prev = head
+    head = head.next
+  }
+  x = n - m
+
+  // 1. prev head 不变  指向 1 2 节点的指针不变
+  while (x--) {
+    prevnext = prev.next // 获取 prev的 下一项
+    next = head.next // 获取 当前项的 下一项 
+    
+    // 当前项的下一项插入到 prev项 后面 （通过更改各项指针）
+    prev.next = next // 前一项 .next--> 下一项         1 -> 3
+    head.next = next.next // 当前项 .next--> 下下一项   2 -> 4
+    next.next = prevnext // 下一项 .next -->  prev.next         3 -> 2
+  }
+
+  return result.next
 }
