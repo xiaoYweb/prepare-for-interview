@@ -20,7 +20,7 @@
  *    重置stack (公共变量)
  *    符合条件 请求任务调度
  *    scheduleWorkToRoot 向上查找 fiberRoot 顺便修改状态 触发更新的fiber 过期时间若小于则更新  
- *    requestWork
+ *    requestWork(通过 requestAnimationFrame 和 postMessage 模拟实现)
  *      将 rootFiber 节点加入调度队列中
  *      判断是否是批量更新
  *      根据 expirationTime 判断调度类型
