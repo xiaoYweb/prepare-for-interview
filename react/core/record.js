@@ -1,9 +1,10 @@
 /**
- * 1. react.createElement  --->  reactElement 元素 | vdom | 对象
+ * 1. 编译阶段 将 通过 babel 将 jsx 语法 转化为  react.ReactElement(type, config, ...)  函数 
+ *    等到页面执行时候 转为 --->  reactElement 元素 | vdom | 对象
  * 
  * 
  * 
- * 2. 创建更新阶段 ReactDom.render()
+ * 2. 创建更新阶段 ReactDom.render()  
  *    创建fiberRoot  rootFiber   
  *    fiberRoot.current = rootFiber
  *    rootFiber.stateNode = fiberRoot
@@ -17,7 +18,10 @@
  * 
  * 3. 协调阶段 scheduleWork
  *    找到更新对应的 fiberRoot 节点(setState forceUpdate 传的是本身的fiber节点 所以需要向上查找)
- *    重置stack (公共变量)
+ *    重置stack (公共变set
+ * 
+ * 
+ * 
  *    符合条件 请求任务调度
  *    scheduleWorkToRoot 向上查找 fiberRoot 顺便修改状态 触发更新的fiber 过期时间若小于则更新  
  *    requestWork(通过 requestAnimationFrame 和 postMessage 模拟实现)
