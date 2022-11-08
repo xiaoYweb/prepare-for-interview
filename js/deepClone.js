@@ -6,7 +6,7 @@ function deepClone(val, mp = new WeakMap()) {
   const typeofVal = typeof val;
 
   if (typeofVal === 'symbol') { // 单独处理 symbol 类型的值
-    return cloneSymbol(val.description)
+    return cloneSymbol(val)
   }
   if (typeofVal === 'function') { // 单独处理 function 类型的值
     return cloneFunction(val)
@@ -16,6 +16,9 @@ function deepClone(val, mp = new WeakMap()) {
   }
   if (val instanceof Date) { // 日期对象
     return new Date(val)
+  }
+  if (val instanceof Error) { // 日期对象
+    return new Error(val)
   }
   if (val instanceof RegExp) { // 正则对象
     return cloneReg(val)
@@ -55,7 +58,6 @@ function isOtherType(val) {
   if (val === null) return true
   const type = typeof val;
   if (type !== 'object' && type !== 'symbol' && type !== 'function') return true
-
 }
 
 function cloneSymbol(origin) {
@@ -63,7 +65,7 @@ function cloneSymbol(origin) {
 }
 function cloneReg(reg) {
   const reFlags = /\w*$/
-  const result = new RegExp(reg.origin, reg.exec(reFlags))
+  const result = new RegExp(reg.source, reFlags.exec(reg))
   result.lastIndex = reg.lastIndex;
   return result;
 }
