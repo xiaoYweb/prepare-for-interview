@@ -1,4 +1,4 @@
-/** (middle) 哈希 | 双指针
+/** 三数之和 (middle) 哈希 | 双指针 
  * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组
   输入：nums = [-1,0,1,2,-1,-4]
   输出：[[-1,-1,2],[-1,0,1]]
@@ -127,4 +127,45 @@ function threeSum(nums, sum = 0) { // 双指针
   return result;
 }
 
-// console.log('[-1,0,1,2,-1,-4] result', threeSum([-1, 0, 1, 2, -1, -4])) // [[-1,-1,2],[-1,0,1]]
+console.log('[-1,0,1,2,-1,-4] result', threeSum([-1, 0, 1, 2, -1, -4])) // [[-1,-1,2],[-1,0,1]]
+
+function threeSum(nums) {
+  const len = nums.length
+  if (len < 3) return []
+  const result = []
+  nums.sort((a, b) => a - b)
+  console.log(nums)
+  for (let i = 0; i < len - 2; i++) {
+    let l = i + 1
+    let r = len - 1
+    while (true) {
+      // 指针过界
+      if (l >= r) {
+        break
+      }
+      const sum = nums[i] + nums[l] + nums[r]
+      if (sum > 0) {
+        r--
+      } else if (sum < 0) {
+        l++
+      } else {
+        result.push([nums[i], nums[l ++], nums[r --]])
+        // [-2,1,1,1,1] 输出结果 存在 [[-2,1,1]...] 题目要求此种清空只输出 [[-2,1,1]]
+        // 所以要跳过重复项
+        while (nums[l] === nums[l - 1]) { // 跳过重复项 当前项 与前一项对比 
+          l++
+        }
+        while (nums[r] === nums[r + 1]) { // 跳过重复项 当前项 与前一项对比 
+          r--
+        }
+      }
+    }
+    // 跳过重复项
+    while(nums[i] === nums[i + 1]) {
+      i += 1
+    }
+  }
+
+  return result
+}
+console.log('[-2,1,1,1,1] result', threeSum([-2,1,1,1,1]))

@@ -88,3 +88,35 @@ function lengthOfLongestSubstring(s) {
 
   return maxLen
 }
+
+// 
+/**
+ * 1. 上一个位置 不是重复的索引开始 而是上一次重复的字符位置后一位开始
+ * 2. 当前的最大长度 >= len - prev 则直接返回最大值 （此处容易理解为 len - i）
+ * @param {*} s 
+ * @returns 
+ */
+function lengthOfLongestSubstring(s) {
+  let len = s.length
+    if (len <= 1) return len
+    let mp = {}
+    let result = 0
+    let prev = 0
+    for (let i = 0; i < len; i++) {
+        if (result >= len - prev) return result
+        const val = s[i]
+        if (mp[val] !== undefined) {
+            result = Math.max(result, i - prev)
+
+            prev = mp[val] + 1 // 指向与之前重复索引的下一位
+
+            i = mp[val]
+            mp = {}
+            continue
+        } else {
+            result = Math.max(result, i - prev + 1)
+            mp[val] = i
+        }
+    }
+    return result
+}

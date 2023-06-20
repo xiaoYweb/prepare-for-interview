@@ -76,3 +76,4 @@ function sumOfTwoNumbers(nums, target) {
 
 console.log('[2, 7, 11, 15] --- 9', sumOfTwoNumbers([2, 7, 11, 15], 9))
 console.log('[2, 7, 11, 15] --- 9', sumOfTwoNumbers([3, 2, 4], 6)) // nums = [3,2,4], target = 6
+console.log('[3, 3] --- 6', sumOfTwoNumbers([3, 3], 6))
